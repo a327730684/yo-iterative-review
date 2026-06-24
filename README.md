@@ -6,7 +6,7 @@
 
 ```bash
 claude plugin marketplace add https://github.com/a327730684/yo-iterative-review
-claude plugin install iterative-review@iterative-review
+claude plugin install voyо-iterative-review@iterative-review
 ```
 
 ## 使用
