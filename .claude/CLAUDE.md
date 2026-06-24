@@ -13,9 +13,9 @@
 claude plugin marketplace add /Users/momo/workspace/claude-plugins/iterative-review
 
 # 安装
-claude plugin install iterative-review@iterative-review
+claude plugin install voyо-iterative-review@voyо-work
 ```
 
-修改代码后执行 `claude plugin update iterative-review` 并重启 Claude Code。
+修改代码后执行 `claude plugin update voyо-work` 并重启 Claude Code。
 
-使用命令：`/iterative-review:start <需求描述>`
+使用命令：`/voyо-work:start <需求描述>`

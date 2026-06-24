@@ -9,7 +9,7 @@
   },
   "plugins": [
     {
-      "name": "iterative-review",
+      "name": "voyо-work",
       "source": ".",
       "description": "Structured implementation-review loop: implementer writes code, reviewer finds itemized defects, implementer accepts or rejects each finding."
     }

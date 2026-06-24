@@ -1,0 +1,13 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node \"${CLAUDE_PLUGIN_ROOT}/mcp-server/check-deps.js\""
+        }
+      ]
+    }
+  ]
+}

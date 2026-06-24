@@ -1,8 +1,14 @@
 {
-  "name": "iterative-review",
+  "name": "voyо-work",
   "description": "Structured implementation-review loop: implementer writes code, reviewer finds itemized defects, implementer accepts or rejects each finding (only modifies accepted ones), reviewer continues finding new issues until none remain.",
   "author": {
     "name": "zhantewei",
     "email": "zhantewei@gmail.com"
+  },
+  "mcpServers": {
+    "orchestrate-impl": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/index.ts"]
+    }
   }
 }
