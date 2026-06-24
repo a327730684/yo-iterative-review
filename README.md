@@ -6,7 +6,7 @@
 
 ```bash
 claude plugin marketplace add https://github.com/a327730684/yo-iterative-review
-claude plugin install voyо-iterative-review@voyо-work
+claude plugin install voyоwork@voyo-marketplace
 ```
 
 ## 使用
@@ -16,13 +16,13 @@ claude plugin install voyо-iterative-review@voyо-work
 通过双 Agent（实现者 + 审查者）迭代协作，自动完成"写代码 → 审代码 → 改代码"循环，直到代码通过审查。
 
 ```
-/voyо-work:iterative <需求描述>
+/voyowork:iterative <需求描述>
 ```
 
 示例：
 
 ```
-/voyо-work:iterative 实现一个 JWT 用户登录 API，要求邮箱+密码验证、bcrypt 哈希、返回 access/refresh token
+/voyowork:iterative 实现一个 JWT 用户登录 API，要求邮箱+密码验证、bcrypt 哈希、返回 access/refresh token
 ```
 
 插件会自动：
@@ -33,13 +33,13 @@ claude plugin install voyо-iterative-review@voyо-work
 通过 MCP 工具管理设计和实施计划，将需求拆解为设计和任务计划，分派给 subAgent 执行。
 
 ```
-/voyо-work:orchestrate <需求描述>
+/voyowork:orchestrate <需求描述>
 ```
 
 示例：
 
 ```
-/voyо-work:orchestrate 实现一个用户管理模块，包含注册、登录、个人资料编辑功能
+/voyowork:orchestrate 实现一个用户管理模块，包含注册、登录、个人资料编辑功能
 ```
 
 流程：

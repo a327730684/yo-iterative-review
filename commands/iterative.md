@@ -1,5 +1,5 @@
 ---
-description: Start an iterative implementation-review loop with quality gate. Use when the user wants code written with strict review, or invokes "/voyо-work:start".
+description: Start an iterative implementation-review loop with quality gate. Use when the user wants code written with strict review, or invokes "/voyowork:start".
 argument-hint: <description of what to implement>
 ---
 
@@ -27,6 +27,6 @@ argument-hint: <description of what to implement>
 ## 示例用法
 
 ```
-/voyо-work:iterative 实现一个 JWT 用户登录 API，要求邮箱+密码验证、返回 access/refresh token、使用 bcrypt、支持 rate limiting
-/voyо-work:iterative 重构 src/utils.ts 中的日期处理函数，统一使用 date-fns
+/voyowork:iterative 实现一个 JWT 用户登录 API，要求邮箱+密码验证、返回 access/refresh token、使用 bcrypt、支持 rate limiting
+/voyowork:iterative 重构 src/utils.ts 中的日期处理函数，统一使用 date-fns
 ```

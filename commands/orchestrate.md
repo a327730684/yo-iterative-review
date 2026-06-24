@@ -25,6 +25,6 @@ argument-hint: <description of the feature to implement>
 ## 示例用法
 
 ```
-/voyо-work:orchestrate 实现一个用户管理模块，包含注册、登录、个人资料编辑功能
-/voyо-work:orchestrate 开发一个博客系统，支持文章发布、评论、分类标签
+/voyowork:orchestrate 实现一个用户管理模块，包含注册、登录、个人资料编辑功能
+/voyowork:orchestrate 开发一个博客系统，支持文章发布、评论、分类标签
 ```
