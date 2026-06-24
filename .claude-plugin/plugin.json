@@ -1,0 +1,8 @@
+{
+  "name": "iterative-review",
+  "description": "Structured implementation-review loop: implementer writes code, reviewer finds itemized defects, implementer accepts or rejects each finding (only modifies accepted ones), reviewer continues finding new issues until none remain.",
+  "author": {
+    "name": "zhantewei",
+    "email": "zhantewei@gmail.com"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "iterative-review",
+  "owner": {
+    "name": "zhantewei"
+  },
+  "metadata": {
+    "description": "Iterative implementation-review loop plugin marketplace",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "iterative-review",
+      "source": ".",
+      "description": "Structured implementation-review loop: implementer writes code, reviewer finds itemized defects, implementer accepts or rejects each finding."
+    }
+  ]
+}
