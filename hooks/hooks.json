@@ -1,13 +1,15 @@
 {
-  "SessionStart": [
-    {
-      "matcher": "",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "node \"${CLAUDE_PLUGIN_ROOT}/mcp-server/check-deps.mjs\""
-        }
-      ]
-    }
-  ]
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/mcp-server/check-deps.mjs\""
+          }
+        ]
+      }
+    ]
+  }
 }
