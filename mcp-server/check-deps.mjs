@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
-const { existsSync } = require('fs');
-const { join } = require('path');
+import { execSync } from "child_process";
+import { existsSync } from "fs";
+import { join } from "path";
 
-const mcpServerDir = __dirname;
+
+const mcpServerDir = import.meta.dirname;
+
 const nodeModulesDir = join(mcpServerDir, 'node_modules');
 
 if (!existsSync(nodeModulesDir)) {
