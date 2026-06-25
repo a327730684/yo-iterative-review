@@ -29,3 +29,7 @@ Thumbs.db
 
 # Logs
 *.log
+*.pdf
+test/
+.claude/
+.env
