@@ -196,7 +196,7 @@ Examples:
 }
 
 // 当直接执行此脚本时运行 main 函数
-if (process.argv[1]?.endsWith('bailian-web-search.js')) {
+if (process.argv[1]?.endsWith('yo-web-search.js')) {
   main();
 }
 
