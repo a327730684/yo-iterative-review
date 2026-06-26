@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>README</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 980px; margin: 40px auto; padding: 0 24px; color: #24292f; background: #fff; }
+h1, h2, h3, h4 { border-bottom: 1px solid #d0d7de; padding-bottom: .3em; margin-top: 1.5em; margin-bottom: 1em; }
+h1 { font-size: 2em; border-bottom-width: 2px; }
+pre { background: #f6f8fa; padding: 16px; overflow: auto; border-radius: 6px; font-size: 85%; line-height: 1.45; }
+code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 85%; background: #f6f8fa; padding: .2em .4em; border-radius: 3px; }
+pre code { background: transparent; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; }
+th { background: #f6f8fa; font-weight: 600; }
+blockquote { border-left: 4px solid #d0d7de; color: #656d76; padding-left: 16px; margin-left: 0; }
+hr { border: 0; border-top: 1px solid #d0d7de; margin: 24px 0; }
+a { color: #0969da; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.mermaid { background: #fff; text-align: center; }
+.mermaid svg { max-width: 100%; height: auto; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    mermaid.initialize({ startOnLoad: true, theme: 'default' });
+  });
+</script>
+</head>
+<body>
+<h1>Voyo Work Plugin</h1>
+<p>提供两种代码开发工作流：迭代审查循环和结构化编排流程。</p>
+<h2>安装</h2>
+<pre><code class="language-bash">claude plugin marketplace add https://github.com/a327730684/yo-iterative-review
+claude plugin install voyоwork@voyo-marketplace
+</code></pre>
+<h2>使用</h2>
+<h3>1. 迭代审查循环</h3>
+<p>通过双 Agent（实现者 + 审查者）迭代协作，自动完成&quot;写代码 → 审代码 → 改代码&quot;循环，直到代码通过审查。</p>
+<pre><code>/voyowork:iterative &lt;需求描述&gt;
+</code></pre>
+<p>示例：</p>
+<pre><code>/voyowork:iterative 实现一个 JWT 用户登录 API，要求邮箱+密码验证、bcrypt 哈希、返回 access/refresh token
+</code></pre>
+<p>插件会自动：</p>
+<ol>
+<li>实现代码 → 2. 审查者列出缺陷 → 3. 实现者逐条判断 ACCEPT/REJECT → 4. 循环直到通过或达到上限</li>
+</ol>
+<h3>2. 结构化编排流程</h3>
+<p>通过 MCP 工具管理设计和实施计划，将需求拆解为设计和任务计划，分派给 subAgent 执行。</p>
+<pre><code>/voyowork:orchestrate &lt;需求描述&gt;
+</code></pre>
+<p>示例：</p>
+<pre><code>/voyowork:orchestrate 实现一个用户管理模块，包含注册、登录、个人资料编辑功能
+</code></pre>
+<p>流程：</p>
+<ol>
+<li>创建需求设计文档 (<code>&lt;feature_name&gt;_design.md</code>)</li>
+<li>创建实现计划表 (<code>&lt;feature_name&gt;_plan.md</code>)</li>
+<li>选择 subAgent 执行代码实施</li>
+<li>按模块逐步完成，更新计划进度</li>
+</ol>
+<h2>工具集</h2>
+<h3>yo-web-search</h3>
+<p>联网搜索工具，基于阿里云百炼 WebSearch API，可查询百科知识、时事新闻、天气等信息。</p>
+<pre><code class="language-bash">node yo-web-search.js bailian_web_search --query=&quot;人工智能&quot; --count=10
+</code></pre>
+<p><strong>环境变量：</strong> <code>ALI_API_TOKEN</code> — 百炼 API Key</p>
+<p><strong>禁用 Claude Code 内置 WebSearch：</strong> 在 <code>settings.json</code> 中添加：</p>
+<pre><code class="language-json">{
+  &quot;disallowedTools&quot;: [&quot;WebSearch&quot;]
+}
+</code></pre>
+<h3>yo-md2html</h3>
+<p>将 Markdown 文件或目录批量转换为 HTML，支持 Mermaid 图表渲染、GitHub 风格样式。</p>
+<pre><code class="language-bash">node yo-md-html.js yo_md_html --input=&quot;docs/readme.md&quot; --output=&quot;dist&quot;
+</code></pre>
+<p><strong>环境变量：</strong> 无</p>
+<h3>yo-pdf2md</h3>
+<p>将 PDF 文件逐页转为图片，通过多模态大模型识别后输出标准 Markdown。</p>
+<pre><code class="language-bash">node yo-pdf2md.ts yo_pdf2md --input=&quot;/path/to/doc.pdf&quot; --output=&quot;/path/to/doc.md&quot;
+</code></pre>
+<p><strong>环境变量：</strong></p>
+<ul>
+<li><code>yo_base_url</code> — API 基础 URL（Anthropic Messages API 兼容格式）</li>
+<li><code>yo_api_key</code> — API 密钥</li>
+<li><code>yo_multi_model</code> — 多模态模型名称</li>
+</ul>
+
+</body>
+</html>

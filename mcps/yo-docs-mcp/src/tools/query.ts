@@ -1,9 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { searchByKeywords } from '../database.ts';
+import { searchByKeywords, DOCS_DIR } from '../database.ts';
 import { tokenize } from '../tokenizer.ts';
-
-const DOCS_DIR = process.env.DOCS_DIR || './docs';
 
 export interface QueryParams {
   type: string;

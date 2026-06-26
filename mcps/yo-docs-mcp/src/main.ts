@@ -68,7 +68,7 @@ export async function main() {
         type: z.string().describe('文档类型，如：前端、后端'),
         lang: z.string().describe('文档语言/框架，如：vue、react、node'),
         question: z.string().describe('原始问题/关键词来源'),
-        doc_path: z.string().describe('文档存储路径（相对于 docs 目录），如：frontend/vue/fontawesome.md'),
+        doc_name: z.string().describe('文档名称（建议根据 question 自动总结，如：fontawesome-usage）'),
         content: z.string().describe('文档内容（Markdown 格式）'),
       },
     },
@@ -77,7 +77,7 @@ export async function main() {
         type: args.type,
         lang: args.lang,
         question: args.question,
-        doc_path: args.doc_path,
+        doc_name: args.doc_name,
         content: args.content,
       });
       return {

@@ -7,8 +7,8 @@
         },
         "yo-docs-mcp": {
             "command": "node",
-            "args": ["src/index.ts"],
-            "cwd": "/Users/momo/workspace/claude-plugins/iterative-review/mcps/yo-docs-mcp"
+            "args": ["/Users/momo/workspace/claude-plugins/iterative-review/mcps/yo-docs-mcp/src/index.ts"],
+            "env": {}
         }
     }
 }

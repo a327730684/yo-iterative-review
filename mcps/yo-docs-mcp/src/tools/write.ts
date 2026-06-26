@@ -7,17 +7,16 @@ import {
   insertDocument,
   insertKeyword,
   insertDocKeyword,
+  DOCS_DIR,
   type Document,
 } from '../database.ts';
 import { tokenize } from '../tokenizer.ts';
-
-const DOCS_DIR = process.env.DOCS_DIR || './docs';
 
 export interface WriteParams {
   type: string;
   lang: string;
   question: string;
-  doc_path: string;
+  doc_name: string;
   content: string;
 }
 
@@ -31,23 +30,22 @@ export interface WriteResult {
  * 写入文档并建立索引
  */
 export async function writeDocument(params: WriteParams): Promise<WriteResult> {
-  const { type, lang, question, doc_path, content } = params;
+  const { type, lang, question, doc_name, content } = params;
 
   // 生成 UUID
   const id = randomUUID();
 
-  // 写入文档文件（写入前确保子目录存在）
-  const fullPath = path.join(DOCS_DIR, doc_path);
-  const dir = path.dirname(fullPath);
-  mkdirSync(dir, { recursive: true });
+  // 写入文档文件（直接使用 doc_name.md 作为文件名，存储在 DOCS_DIR 下）
+  const fullPath = path.join(DOCS_DIR, `${doc_name}.md`);
+  mkdirSync(DOCS_DIR, { recursive: true });
   await fs.writeFile(fullPath, content, 'utf-8');
 
-  const keywords = tokenize(question + ' ' + content);
+  const keywords = tokenize(question);
 
   // 事务写入数据库（事务内是同步操作）
   runTransaction(() => {
     // 插入文档记录
-    const doc: Document = { id, type, lang, question, doc_path };
+    const doc: Document = { id, type, lang, question, doc_path: `${doc_name}.md` };
     insertDocument(doc);
 
     // 对每个分词结果：INSERT OR IGNORE 写入 keywords 表，再获取 id，INSERT OR IGNORE 写入 doc_keywords 关联表

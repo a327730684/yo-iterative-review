@@ -34,3 +34,4 @@ test/
 .claude/
 .env
 work_flow/
+*.log
