@@ -7,7 +7,7 @@
         },
         "yo-docs-mcp": {
             "command": "node",
-            "args": ["/Users/momo/workspace/claude-plugins/iterative-review/mcps/yo-docs-mcp/src/index.ts"],
+            "args": ["D:/ai/voyo-work/mcps/yo-docs-mcp/src/index.ts"],
             "env": {}
         }
     }
