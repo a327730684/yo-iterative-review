@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+       "excel": {
+        "command": "npx",
+        "args": ["-y", "@zhiweixu/excel-mcp-server"],
+        "env": {}
+        },
+        "yo-docs-mcp": {
+            "command": "node",
+            "args": ["D:/ai/voyo-work/mcps/yo-docs-mcp/src/index.ts"],
+            "env": {}
+        }
+    }
+}

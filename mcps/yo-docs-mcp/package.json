@@ -1,0 +1,18 @@
+{
+  "name": "yo-docs-mcp",
+  "version": "1.0.0",
+  "description": "基于关键词匹配的文档查询 MCP Server，使用 jieba 分词 + SQLite 倒排索引",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node src/index.ts",
+    "test": "node tests/run-all.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@node-rs/jieba": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}
