@@ -1,8 +1,13 @@
 import { DatabaseSync } from 'node:sqlite';
 import path from 'node:path';
 import { mkdirSync } from 'node:fs';
+const __dirname = path.dirname(import.meta.filename);
+const BASE_DIR = path.resolve(__dirname, '..');
 
-const DB_PATH = process.env.DB_PATH || './data/docs.db';
+const DB_PATH = process.env.DB_PATH || path.join(BASE_DIR, 'data', 'docs.db');
+
+// 导出 DOCS_DIR 供其他模块使用
+export const DOCS_DIR = process.env.DOCS_DIR || path.join(BASE_DIR, 'docs');
 
 // 确保数据库目录存在
 const dbDir = path.dirname(DB_PATH);

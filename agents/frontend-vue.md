@@ -47,35 +47,7 @@ src/styles/
 // 组件公共样式
 ```
 
-5. **Font Awesome**:
-
-安装依赖：
-```bash
-npm i --save @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/vue-fontawesome@latest-3
-```
-
-main.ts 全局注册：
-```typescript
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(faUser, faLock)
-app.component('font-awesome-icon', FontAwesomeIcon)
-```
-
-模板中使用：
-```vue
-<font-awesome-icon icon="user" />
-<font-awesome-icon :icon="['fas', 'user']" />
-```
-
-懒加载（Tree Shaking）— 按需导入单个图标：
-```typescript
-import { faArrowUp } from '@fortawesome/free-solid-svg-icons/faArrowUp'
-import { faUser } from '@fortawesome/free-solid-svg-icons/faUser'
-library.add(faArrowUp, faUser)
-```
+5. **Font Awesome**：使用 `mcp__yo-docs-mcp__query` 查询 Font Awesome 的使用方法（lang: `vue`，query: `Font Awesome`）
 
 ## 状态管理
 
@@ -138,3 +110,7 @@ const state = reactive({
 - [ ] 状态是否使用 reactive 而非 ref？
 - [ ] 图标是否按需懒加载？
 - [ ] 类型是否完整定义（无 any）？
+
+## 返回值
+
+值返回最终简洁的结果，不要返回中间过程

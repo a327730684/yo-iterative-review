@@ -7,6 +7,8 @@
 ```bash
 claude plugin marketplace add https://github.com/a327730684/yo-iterative-review
 claude plugin install voyоwork@voyo-marketplace
+#或者 
+/plugin install voyowork@voyo-marketplace 
 ```
 
 ## 使用

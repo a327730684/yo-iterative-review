@@ -33,4 +33,7 @@ Thumbs.db
 test/
 .claude/
 .env
+
+work/
+work-flow/
 work_flow/
