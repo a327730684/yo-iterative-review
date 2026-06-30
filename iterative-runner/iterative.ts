@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const DEFAULT_MAX_REVIEW_COUNT = 5;
+const DEFAULT_MAX_REVIEW_COUNT = 2;
+const DEFAULT_MAX_FIX_ATTEMPTS = 3;
 const DEFAULT_AGENT = 'implementer';
 const REVIEWER_SCHEMA_PATH = join(__dirname, 'schemas', 'reviewer-schema.json');
 const COMPLETED_CHECK_SCHEMA = {
@@ -56,7 +57,8 @@ async function main(): Promise<void> {
 
   const projectDir = getProjectDir();
   const random6 = generateRandom6();
-  const tmpDir = join(projectDir, '.voyo-work', 'tmp', `iterative.${random6}`);
+  const today = new Date().toISOString().slice(0, 10); // yyyy-MM-dd
+  const tmpDir = join(projectDir, '.voyo-work', 'tmp', 'iterative', `${today}.${random6}`);
   const logger = createLogger(projectDir);
 
   const state: State = {
@@ -96,9 +98,9 @@ async function main(): Promise<void> {
       const issueFile = join(tmpDir, `${state.round}.md`);
       await generateIssueFile(findings, issueFile);
 
-      // 修复 + 完成检查（最多 3 次）
+      // 修复 + 完成检查（最多 DEFAULT_MAX_FIX_ATTEMPTS 次）
       let fixed = false;
-      for (let attempt = 1; attempt <= 3; attempt++) {
+      for (let attempt = 1; attempt <= DEFAULT_MAX_FIX_ATTEMPTS; attempt++) {
         await runImplementAgent(state, false, issueFile);
         await logger.append({ type: 'implement_fix', round: state.round, attempt });
 

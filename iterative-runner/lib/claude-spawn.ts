@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import spawn from 'cross-spawn';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -33,19 +33,23 @@ export async function runClaudeAgent({
   schemaPath,
   projectDir,
 }: RunClaudeAgentOptions): Promise<{ inner: unknown; envelope: Record<string, unknown> }> {
+  // cross-spawn 保留参数边界，schema（单行 JSON）可直接作参数。
+  // 但多行 prompt 作命令行参数时换行会在 Windows 下丢失，故 prompt 走 stdin。
   const args = [
-    '-p', prompt,
+    '-p',
     '--agent', agent,
     '--output-format', 'json',
     '--dangerously-skip-permissions',
   ];
 
   if (schemaPath) {
-    const schema = await readFile(schemaPath, 'utf8');
+    const schemaRaw = await readFile(schemaPath, 'utf8');
+    // 压成单行 JSON：claude --json-schema 不接受参数中的换行，会报 Expected '}'
+    const schema = JSON.stringify(JSON.parse(schemaRaw));
     args.push('--json-schema', schema);
   }
 
-  const { stdout, stderr, exitCode } = await execClaude(args, { cwd: projectDir });
+  const { stdout, stderr, exitCode } = await execClaude(args, { cwd: projectDir, stdin: prompt });
 
   if (exitCode !== 0) {
     const errMsg = stderr || `claude -p 退出码 ${exitCode}`;
@@ -84,13 +88,14 @@ export async function runClaudeTextAgent({
   prompt,
   projectDir,
 }: RunClaudeTextAgentOptions): Promise<string> {
+  // 多行 prompt 走 stdin，避免命令行参数在 Windows 下丢失换行
   const args = [
-    '-p', prompt,
+    '-p',
     '--agent', agent,
     '--dangerously-skip-permissions',
   ];
 
-  const { stdout, stderr, exitCode } = await execClaude(args, { cwd: projectDir });
+  const { stdout, stderr, exitCode } = await execClaude(args, { cwd: projectDir, stdin: prompt });
 
   if (exitCode !== 0) {
     const errMsg = stderr || `claude -p 退出码 ${exitCode}`;
@@ -100,18 +105,23 @@ export async function runClaudeTextAgent({
   return stdout.trim();
 }
 
-function execClaude(args: string[], { cwd }: { cwd: string }): Promise<ExecResult> {
+function execClaude(
+  args: string[],
+  { cwd, stdin }: { cwd: string; stdin?: string },
+): Promise<ExecResult> {
   return new Promise((resolve, reject) => {
+    // cross-spawn：自动识别 .cmd/.exe/.bat，不开 shell，参数边界保留。
+    // 跨平台（Windows/Linux/macOS）一致。
     const child = spawn('claude', args, {
       cwd,
-      stdio: ['ignore', 'pipe', 'pipe'],
+      stdio: stdin !== undefined ? ['pipe', 'pipe', 'pipe'] : ['ignore', 'pipe', 'pipe'],
       env: { ...process.env },
     });
 
     const stdoutChunks: Buffer[] = [];
     const stderrChunks: Buffer[] = [];
 
-    child.stdout.on('data', chunk => stdoutChunks.push(chunk));
+    child.stdout//.on('data', chunk => stdoutChunks.push(chunk));
     child.stderr.on('data', chunk => stderrChunks.push(chunk));
 
     child.on('error', reject);
@@ -120,6 +130,12 @@ function execClaude(args: string[], { cwd }: { cwd: string }): Promise<ExecResul
       const stderr = Buffer.concat(stderrChunks).toString('utf8');
       resolve({ stdout, stderr, exitCode });
     });
+
+    // prompt 经 stdin 传入后关闭，claude -p 据此进入非交互模式
+    if (stdin !== undefined && child.stdin) {
+      child.stdin.write(stdin);
+      child.stdin.end();
+    }
   });
 }
 

@@ -28,7 +28,7 @@ argument-hint: <description of what to implement> [--agent <name>] [--max-review
 2. 在工作目录执行：
 
    ```bash
-   node --experimental-strip-types iterative-runner/iterative.ts "$ARGUMENTS"
+   node iterative-runner/iterative.ts "$ARGUMENTS"
    ```
 
 3. 等待脚本结束。脚本会自动：
