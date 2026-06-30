@@ -7,15 +7,16 @@ export interface Logger {
 }
 
 /**
- * 创建本次 iterative 流程的日志记录器。
+ * 创建本次流程的日志记录器。
  * @param projectDir 项目根目录
+ * @param prefix     日志文件名前缀，用于区分不同流程（默认 `iterative`）
  */
-export function createLogger(projectDir: string): Logger {
+export function createLogger(projectDir: string, prefix = 'iterative'): Logger {
   const now = new Date();
   const dateStr = now.toISOString().slice(0, 10); // yyyy-MM-dd
   const timestamp = now.toISOString().replace(/[-:T]/g, '').slice(0, 14); // yyyyMMddHHmmss
   const logDir = join(projectDir, '.voyo-work', 'logs', dateStr);
-  const logPath = join(logDir, `iterative_${timestamp}.log`);
+  const logPath = join(logDir, `${prefix}_${timestamp}.log`);
   
   let dirEnsured = false;
 

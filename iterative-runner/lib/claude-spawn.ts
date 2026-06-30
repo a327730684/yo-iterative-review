@@ -121,8 +121,9 @@ function execClaude(
     const stdoutChunks: Buffer[] = [];
     const stderrChunks: Buffer[] = [];
 
-    child.stdout//.on('data', chunk => stdoutChunks.push(chunk));
-    child.stderr.on('data', chunk => stderrChunks.push(chunk));
+    // stdio 配置为 'pipe'，运行时 stdout/stderr 必非空；类型签名含 null，故加守卫
+    if (child.stdout) child.stdout.on('data', chunk => stdoutChunks.push(chunk));
+    if (child.stderr) child.stderr.on('data', chunk => stderrChunks.push(chunk));
 
     child.on('error', reject);
     child.on('close', exitCode => {
