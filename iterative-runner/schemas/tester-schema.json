@@ -1,14 +1,18 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "case": { "type": "string" },
-      "failure": { "type": "string" },
-      "passed": { "type": "boolean" }
-    },
-    "required": ["case", "failure", "passed"],
-    "additionalProperties": false
-  }
+  "type": "object",
+  "properties": {
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "case": { "type": "string" },
+          "failure": { "type": "string" },
+          "passed": { "type": "boolean" }
+        },
+        "required": ["case", "failure", "passed"]
+      }
+    }
+  },
+  "required": ["results"]
 }

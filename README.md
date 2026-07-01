@@ -1,6 +1,6 @@
 # Voyo Work Plugin
 
-提供两种代码开发工作流：迭代审查循环和结构化编排流程。
+代码开发工作流 + 文档/搜索工具集。
 
 ## 安装
 
@@ -9,85 +9,29 @@ claude plugin marketplace add https://github.com/a327730684/yo-iterative-review
 claude plugin install voyоwork@voyo-marketplace
 ```
 
-## 使用
-
-### 1. 迭代审查循环
-
-通过双 Agent（实现者 + 审查者）迭代协作，自动完成"写代码 → 审代码 → 改代码"循环，直到代码通过审查。
+若 `claude plugin install` 安装失败，在 Claude Code 交互模式下改用：
 
 ```
-/voyowork:iterative <需求描述>
+/plugin install voyowork@voyo-marketplace
 ```
+
+## 命令
+
+| 命令 | 说明 |
+|---|---|
+| `/voyowork:iterative <需求>` | 实现—审查—修复循环，直到通过或达到轮数上限 |
+| `/voyowork:test-loop <需求>` | 针对已有代码的测试—修复循环 |
+| `/voyowork:develop <需求>` | 实现审查 + 测试 一条龙（iterative → 自动生成测试需求 → test-loop）|
+| `/voyowork:orchestrate <需求>` | 结构化设计 + 任务编排流程，拆解为设计文档与实施计划分派执行 |
 
 示例：
 
 ```
-/voyowork:iterative 实现一个 JWT 用户登录 API，要求邮箱+密码验证、bcrypt 哈希、返回 access/refresh token
+/voyowork:develop 实现一个 JWT 用户登录 API，邮箱+密码验证、bcrypt 哈希、返回 access/refresh token
 ```
 
-插件会自动：
-1. 实现代码 → 2. 审查者列出缺陷 → 3. 实现者逐条判断 ACCEPT/REJECT → 4. 循环直到通过或达到上限
+CLI 直接用法与参数见 [iterative-runner/readme.md](iterative-runner/readme.md)。
 
-### 2. 结构化编排流程
+## 工具集（Skills）
 
-通过 MCP 工具管理设计和实施计划，将需求拆解为设计和任务计划，分派给 subAgent 执行。
-
-```
-/voyowork:orchestrate <需求描述>
-```
-
-示例：
-
-```
-/voyowork:orchestrate 实现一个用户管理模块，包含注册、登录、个人资料编辑功能
-```
-
-流程：
-1. 创建需求设计文档 (`<feature_name>_design.md`)
-2. 创建实现计划表 (`<feature_name>_plan.md`)
-3. 选择 subAgent 执行代码实施
-4. 按模块逐步完成，更新计划进度
-
-## 工具集
-
-### yo-web-search
-
-联网搜索工具，基于阿里云百炼 WebSearch API，可查询百科知识、时事新闻、天气等信息。
-
-```bash
-node yo-web-search.js bailian_web_search --query="人工智能" --count=10
-```
-
-**环境变量：** `ALI_API_TOKEN` — 百炼 API Key
-
-**禁用 Claude Code 内置 WebSearch：** 在 `settings.json` 中添加：
-
-```json
-{
-  "disallowedTools": ["WebSearch"]
-}
-```
-
-### yo-md2html
-
-将 Markdown 文件或目录批量转换为 HTML，支持 Mermaid 图表渲染、GitHub 风格样式。
-
-```bash
-node yo-md-html.js yo_md_html --input="docs/readme.md" --output="dist"
-```
-
-**环境变量：** 无
-
-### yo-pdf2md
-
-将 PDF 文件逐页转为图片，通过多模态大模型识别后输出标准 Markdown。
-
-```bash
-node yo-pdf2md.ts yo_pdf2md --input="/path/to/doc.pdf" --output="/path/to/doc.md"
-```
-
-**环境变量：**
-- `yo_base_url` — API 基础 URL（Anthropic Messages API 兼容格式）
-- `yo_api_key` — API 密钥
-- `yo_multi_model` — 多模态模型名称
-
+yo-web-search、yo-md2html、yo-pdf2md，见 [readme/skills.md](readme/skills.md)。

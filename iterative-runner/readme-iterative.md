@@ -1,5 +1,7 @@
 # iterative-runner
 
+> 默认配置：`MAX_REVIEW_COUNT = 1`
+
 一个"实现—审查—修复"的迭代式代码生成运行器。它通过反复调用 Claude Code 的无头子进程（`claude -p`），让**实现者（implementer）**写代码、**审查者（reviewer）**挑问题，循环直到审查通过或达到上限，最后给出总结。
 
 入口文件：[`iterative.ts`](./iterative.ts)
@@ -38,7 +40,7 @@ flowchart TD
 | `tmpDir` | 本次运行的临时目录，存放各轮修复清单 |
 | `requirements` | 用户的需求描述 |
 | `agentName` | 实现者 agent 名，默认 `implementer` |
-| `maxReviewCount` | 审查轮数上限，默认 `5` |
+| `maxReviewCount` | 审查轮数上限，默认 `{MAX_REVIEW_COUNT}` |
 
 ---
 
@@ -54,7 +56,7 @@ node --experimental-strip-types iterative-runner/iterative.ts \
 参数由 [`lib/utils.ts`](./lib/utils.ts) 的 `parseCliArgs` 解析：
 
 - `--agent <name>`：指定实现者 agent，默认 `implementer`。
-- `--max-review-count N`：审查轮数上限，必须为 `>= 1` 的整数，默认 `5`。超出范围会报错退出。
+- `--max-review-count N`：审查轮数上限，必须为 `>= 1` 的整数，默认 `{MAX_REVIEW_COUNT}`。超出范围会报错退出。
 - 其余非 flag 文本合并为 `requirements`（需求描述）。若为空则打印用法并 `exit(1)`。
 
 > 注意：flag 解析用的是正则 `--key value` 形式，需求描述中若含 `--xxx yyy` 段落会被当作 flag 吞掉。
@@ -89,7 +91,7 @@ node --experimental-strip-types iterative-runner/iterative.ts \
 [{ "issue": "问题描述", "expected": "期望的修复标准" }]
 ```
 
-审查 Prompt 要求 reviewer 依次做三件事：功能比对、逻辑 bug 检查、隐患检查（安全/性能/边界）。若无问题返回 `[]`。
+审查 Prompt 要求 reviewer **只上报严重问题**，聚焦三类：① 功能缺陷（与需求不一致或逻辑 bug）；② 已验证的性能问题（N+1、无上限大结果集、复杂度问题）；③ 并发与阻塞（死锁、竞态、异步中调用同步阻塞方法）。明确忽略安全类、运行环境兼容性/可移植性、以及代码风格等「锦上添花」建议。若无问题返回 `[]`。
 
 - 返回非数组 → 抛错终止流程。
 - 返回空数组 → 打印 `review passed`，`break` 跳出循环。

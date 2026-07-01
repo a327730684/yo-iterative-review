@@ -3,50 +3,28 @@ description: Start an iterative implementation-review loop with quality gate.
 argument-hint: <description of what to implement> [--agent <name>] [--max-review-count N]
 ---
 
-执行固定的 node.js 工作流来跑迭代审查循环。你不再自己维护状态或调度 Agent，而是直接调用工作流脚本，由确定性代码控制循环。
+Run an iterative implement-review loop: the implementer writes code, the reviewer finds issues, and the loop continues until review passes or the round limit is reached.
 
-## 用户输入
+## Your task
 
-用户的需求：`$ARGUMENTS`
+User input: `$ARGUMENTS`
 
-用户可在需求中附加：
+1. **Clarify the requirement**  
+   If the user's description is incomplete, first complete it into an executable requirement based on the current context (what to do, target files/modules, constraints).
 
-- `--agent <name>`：指定实施 agent（默认 `implementer`）。
-- `--max-review-count N`：指定最大审查轮数（默认 5）。
+2. **Build and run the command (background mode)**
 
-例如：
+   Parameters supported by `node iterative-runner/iterative.ts`:
+   - `--agent <name>`: implement/fix agent, defaults to `implementer`
+   - `--max-review-count N`: maximum review rounds, defaults to 1
 
-```
-/voyowork:iterative 实现登录 API --agent implementer --max-review-count 3
-/voyowork:iterative --agent frontend-vue 重构登录页面 --max-review-count 2
-```
-
-## 执行流程
-
-1. 如果 `$ARGUMENTS` 为空，提示用户输入需求。
-
-2. 在工作目录执行：
+   Example:
 
    ```bash
-   node iterative-runner/iterative.ts "$ARGUMENTS"
+   node iterative-runner/iterative.ts "Implement a JWT login API: email+password verification, return tokens, bcrypt, rate limiting" --max-review-count 3
    ```
 
-3. 等待脚本结束。脚本会自动：
-   - 启动初始实现轮（Round 1）
-   - 交替运行 reviewer / 指定的实施 agent 子进程
-   - 将每轮发现的问题与解决情况写入 `.voyo-work/logs/<date>/iterative_<timestamp>.log`
-   - 在 reviewer 返回空、达到最大轮数或出错时结束
+   **IMPORTANT: This loop is long-running (implement + multiple review/fix rounds, often many minutes). You MUST run it in background mode** (Bash tool with `run_in_background: true`), never as a blocking foreground call. After launching, set up a monitor (or periodically read the output file) so you are notified when it finishes, and keep the user informed of progress instead of blocking.
 
-4. 脚本退出后，向用户汇报最终结果。
-
-## 日志
-
-每轮追加 JSON 记录，不含完整对话过程。
-
-## 示例用法
-
-```
-/voyowork:iterative 实现一个 JWT 用户登录 API，要求邮箱+密码验证、返回 access/refresh token、使用 bcrypt、支持 rate limiting
-/voyowork:iterative --max-review-count 3 重构 src/utils.ts 中的日期处理函数，统一使用 date-fns
-/voyowork:iterative --agent frontend-vue 重构登录页面 --max-review-count 2
-```
+3. **Report**  
+   Once the background run completes, read its final summary and report the result to the user.

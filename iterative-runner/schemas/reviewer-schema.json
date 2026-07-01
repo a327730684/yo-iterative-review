@@ -1,13 +1,17 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "issue": { "type": "string" },
-      "expected": { "type": "string" }
-    },
-    "required": ["issue", "expected"],
-    "additionalProperties": false
-  }
+  "type": "object",
+  "properties": {
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "issue": { "type": "string" },
+          "expected": { "type": "string" }
+        },
+        "required": ["issue", "expected"]
+      }
+    }
+  },
+  "required": ["findings"]
 }

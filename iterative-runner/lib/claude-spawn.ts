@@ -6,14 +6,14 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 interface RunClaudeAgentOptions {
-  agent: string;
+  agent?: string;
   prompt: string;
   schemaPath?: string;
   projectDir: string;
 }
 
 interface RunClaudeTextAgentOptions {
-  agent: string;
+  agent?: string;
   prompt: string;
   projectDir: string;
 }
@@ -37,10 +37,12 @@ export async function runClaudeAgent({
   // 但多行 prompt 作命令行参数时换行会在 Windows 下丢失，故 prompt 走 stdin。
   const args = [
     '-p',
-    '--agent', agent,
     '--output-format', 'json',
     '--dangerously-skip-permissions',
   ];
+  if (agent) {
+    args.push('--agent', agent);
+  }
 
   if (schemaPath) {
     const schemaRaw = await readFile(schemaPath, 'utf8');
@@ -53,7 +55,7 @@ export async function runClaudeAgent({
 
   if (exitCode !== 0) {
     const errMsg = stderr || `claude -p 退出码 ${exitCode}`;
-    throw new Error(`claude -p (${agent}) 失败: ${errMsg}`);
+    throw new Error(`claude -p (${agent || 'default'}) 失败: ${errMsg}`);
   }
 
   let envelope: Record<string, unknown>;
@@ -65,7 +67,7 @@ export async function runClaudeAgent({
   }
 
   if (envelope.is_error) {
-    throw new Error(`claude -p (${agent}) 返回错误: ${envelope.result || JSON.stringify(envelope)}`);
+    throw new Error(`claude -p (${agent || 'default'}) 返回错误: ${envelope.result || JSON.stringify(envelope)}`);
   }
 
   let inner: unknown;
@@ -73,7 +75,7 @@ export async function runClaudeAgent({
     inner = typeof envelope.result === 'string' ? JSON.parse(envelope.result) : envelope.result;
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    throw new Error(`解析 ${agent} 结构化 result 失败: ${message}\n原始 result 前 1000 字符:\n${String(envelope.result).slice(0, 1000)}`);
+    throw new Error(`解析 ${agent || 'default'} 结构化 result 失败: ${message}\n原始 result 前 1000 字符:\n${String(envelope.result).slice(0, 1000)}`);
   }
 
   return { inner, envelope };
@@ -91,15 +93,17 @@ export async function runClaudeTextAgent({
   // 多行 prompt 走 stdin，避免命令行参数在 Windows 下丢失换行
   const args = [
     '-p',
-    '--agent', agent,
     '--dangerously-skip-permissions',
   ];
+  if (agent) {
+    args.push('--agent', agent);
+  }
 
   const { stdout, stderr, exitCode } = await execClaude(args, { cwd: projectDir, stdin: prompt });
 
   if (exitCode !== 0) {
     const errMsg = stderr || `claude -p 退出码 ${exitCode}`;
-    throw new Error(`claude -p (${agent}) 失败: ${errMsg}`);
+    throw new Error(`claude -p (${agent || 'default'}) 失败: ${errMsg}`);
   }
 
   return stdout.trim();

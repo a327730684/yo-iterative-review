@@ -1,0 +1,28 @@
+{
+  "name": "iterative-review",
+  "version": "1.0.0",
+  "description": "提供两种代码开发工作流：迭代审查循环和结构化编排流程。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a327730684/yo-iterative-review.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/a327730684/yo-iterative-review/issues"
+  },
+  "homepage": "https://github.com/a327730684/yo-iterative-review#readme",
+  "dependencies": {
+    "cross-spawn": "^7.0.6"
+  }
+}
