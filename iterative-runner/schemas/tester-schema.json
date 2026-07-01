@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "case": { "type": "string" },
+          "failure": { "type": "string" },
+          "passed": { "type": "boolean" }
+        },
+        "required": ["case", "failure", "passed"]
+      }
+    }
+  },
+  "required": ["results"]
+}

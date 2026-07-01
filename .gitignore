@@ -36,4 +36,7 @@ test/
 
 work/
 work-flow/
-work_flow/
+.voyo-work/
+
+__pycache__/
+settings.*.json

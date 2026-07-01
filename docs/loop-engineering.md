@@ -65,12 +65,18 @@ Loop Engineering 的做法是：在每加一个功能之前，先确认上一圈
 
 一个最小可用的循环长这样：
 
-```mermaid
-flowchart TD
-    Start([开始]) --> Do[做一点]
-    Do --> Check[检查一下]
-    Check -->|不对| Do
-    Check -->|对| Next[进入下一轮 / 结束]
+```text
+开始
+  │
+  ▼
+做一点
+  │
+  ▼
+检查一下
+  │
+  ├─ 不对 → 回到“做一点”
+  │
+  └─ 对 → 进入下一轮 / 结束
 ```
 
 看起来很简单，但要让这个圈真正有效，必须回答三个问题：
@@ -117,30 +123,22 @@ flowchart TD
 
 流程像下面这样：
 
-```mermaid
-flowchart TD
-    subgraph ROUND1 [ROUND 1]
-        Cook1[厨师 Implementer<br/>做第一盘菜]
-    end
+```text
+ROUND 1
+  厨师（Implementer）做第一盘菜
 
-    subgraph ROUND2N [ROUND 2..N]
-        Review[评论家 Reviewer<br/>尝一口]
-        Review -->|好吃| Done([上菜，结束])
-        Review -->|太咸| Findings[列出问题清单]
+ROUND 2..N
+  评论家（Reviewer）尝一口
+    ├─ 好吃 → 上菜，结束
+    └─ 太咸 → 列出问题清单
 
-        Decide[厨师针对每条意见决定]
-        Findings --> Decide
-        Decide -->|接受| Fix[修改代码]
-        Decide -->|拒绝| Reason[说明理由]
+  厨师针对每条意见决定
+    ├─ 接受 → 改
+    └─ 拒绝 → 说明理由
 
-        Manager[经理 Orchestrator<br/>决定是否继续]
-        Fix --> Manager
-        Reason --> Manager
-        Manager -->|继续下一轮| Review
-        Manager -->|通过 / 太久 / 僵局| Stop([终止])
-    end
-
-    ROUND1 --> ROUND2N
+  经理（Orchestrator）决定
+    ├─ 继续下一轮
+    └─ 或终止（通过了 / 跑太久了 / 僵住了）
 ```
 
 它的特点是：**高频、小步、对抗性**。通过让“做的人”和“挑刺的人”反复过招，让代码质量快速收敛。
@@ -155,10 +153,8 @@ flowchart TD
 
 它不是直接写代码，而是先把工程分成三个不可逆的阶段：
 
-```mermaid
-flowchart LR
-    Design[设计<br/>Design] --> Plan[计划<br/>Plan]
-    Plan --> Implementation[实施<br/>Implementation]
+```text
+设计（Design）→ 计划（Plan）→ 实施（Implementation）
 ```
 
 就像盖房子：

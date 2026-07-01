@@ -1,32 +1,30 @@
 ---
-description: Start an iterative implementation-review loop with quality gate. Use when the user wants code written with strict review, or invokes "/voyowork:start".
-argument-hint: <description of what to implement>
+description: Start an iterative implementation-review loop with quality gate.
+argument-hint: <description of what to implement> [--agent <name>] [--max-review-count N]
 ---
 
-你将启动一个迭代式审查循环来确保代码质量。
+Run an iterative implement-review loop: the implementer writes code, the reviewer finds issues, and the loop continues until review passes or the round limit is reached.
 
-## 用户输入
+## Your task
 
-用户的需求：$ARGUMENTS
+User input: `$ARGUMENTS`
 
-## 执行流程
+1. **Clarify the requirement**  
+   If the user's description is incomplete, first complete it into an executable requirement based on the current context (what to do, target files/modules, constraints).
 
-1. **理解需求**：解析 `$ARGUMENTS`，确认用户的实现目标。如果需求模糊，先向用户澄清。
+2. **Build and run the command (background mode)**
 
-2. **触发 `iterative-review` Skill**：
-   - 加载 `iterative-review` Skill 中定义的完整循环协议
-   - 按 ROUND 1 → ROUND N 的流程执行
-   - 维护 Review State，调度 `implementer` 和 `reviewer` Agent
-   - 遵守 20 轮上限和所有终止条件
+   Parameters supported by `node iterative-runner/iterative.ts`:
+   - `--agent <name>`: implement/fix agent, defaults to `implementer`
+   - `--max-review-count N`: maximum review rounds, defaults to 1
 
-3. **向用户汇报最终结果**：
-   - 若审查通过（APPROVED）：汇报轮次数、已修复问题、已拒绝问题、修改的文件列表
-   - 若达到最大轮数：汇报当前状态、未解决问题，建议用户手动介入
-   - 若陷入僵局：提示僵局原因，建议用户裁决
+   Example:
 
-## 示例用法
+   ```bash
+   node iterative-runner/iterative.ts "Implement a JWT login API: email+password verification, return tokens, bcrypt, rate limiting" --max-review-count 3
+   ```
 
-```
-/voyowork:iterative 实现一个 JWT 用户登录 API，要求邮箱+密码验证、返回 access/refresh token、使用 bcrypt、支持 rate limiting
-/voyowork:iterative 重构 src/utils.ts 中的日期处理函数，统一使用 date-fns
-```
+   **IMPORTANT: This loop is long-running (implement + multiple review/fix rounds, often many minutes). You MUST run it in background mode** (Bash tool with `run_in_background: true`), never as a blocking foreground call. After launching, set up a monitor (or periodically read the output file) so you are notified when it finishes, and keep the user informed of progress instead of blocking.
+
+3. **Report**  
+   Once the background run completes, read its final summary and report the result to the user.

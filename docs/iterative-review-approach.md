@@ -14,22 +14,19 @@
 
 ## 循环流程
 
-```mermaid
-flowchart TD
-    Start([开始]) --> Init[Implementer 完成初始实现\n记录 Files Involved]
-    Init --> Review[Reviewer 审查当前代码]
+```text
+ROUND 1
+  Implementer 完成初始实现
+  └── 记录 Files Involved
 
-    Review -->|输出 APPROVED| Pass([审查通过\n结束循环])
-    Review -->|输出 REJECTED + FINDINGS| Judge[Implementer 逐项判断每条 Finding]
-
-    Judge -->|ACCEPT| Fix[修改代码\n加入 Fixed Issues]
-    Judge -->|REJECT| Record[记录拒绝理由\n加入 Rejected Issues]
-
-    Fix --> Check[Orchestrator 检查终止条件]
-    Record --> Check
-
-    Check -->|未达最大轮数\n且有实质进展| Review
-    Check -->|达到最大轮数或陷入僵局| Manual([未通过\n建议人工介入])
+ROUND 2..N
+  A. Reviewer 审查当前代码
+     ├── 输出 APPROVED → 结束
+     └── 输出 REJECTED + FINDINGS → 进入 B
+  B. Implementer 对每条 Finding 逐项判断
+     ├── ACCEPT → 修改代码，加入 Fixed Issues
+     └── REJECT  → 记录理由，加入 Rejected Issues
+  C. Orchestrator 检查终止条件，决定是否进入下一轮
 ```
 
 ## 状态管理

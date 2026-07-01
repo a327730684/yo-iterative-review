@@ -1,0 +1,15 @@
+{
+  "name": "iterative-runner",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-strip-types iterative.ts",
+    "check": "node --experimental-strip-types --check iterative.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1"
+  },
+  "dependencies": {
+    "@types/cross-spawn": "^6.0.6",
+    "cross-spawn": "^7.0.6"
+  }
+}
