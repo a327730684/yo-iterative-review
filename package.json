@@ -1,6 +1,6 @@
 {
   "name": "iterative-review",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "提供两种代码开发工作流：迭代审查循环和结构化编排流程。",
   "main": "index.js",
   "directories": {
