@@ -7,10 +7,12 @@
  *   ANTHROPIC_MODEL      - 模型名称
  */
 
-const CLAUDE_CODE_VERSION = '2.1.191';
-const CLAUDE_CODE_USER_AGENT = `claude-code/${CLAUDE_CODE_VERSION}`;
-const CLAUDE_CODE_AI_AGENT = `claude-code_${CLAUDE_CODE_VERSION.replace(/\./g, '-')}_harness`;
-const ANTHROPIC_VERSION = '2023-06-01';
+import {
+  ANTHROPIC_VERSION,
+  CLAUDE_CODE_AI_AGENT,
+  CLAUDE_CODE_USER_AGENT,
+  CALL_MODEL_MAX_RETRIES,
+} from '../env.ts';
 
 export interface ModelConfig {
   baseUrl: string;
@@ -86,6 +88,8 @@ export function getModelConfig(): ModelConfig {
 
 /**
  * 调用 /v1/messages 接口。
+ *
+ * 当访问 LLM 出错时，会按指数退避进行最多 CALL_MODEL_MAX_RETRIES 次重试。
  */
 export async function callModel({
   messages,
@@ -98,6 +102,56 @@ export async function callModel({
     throw new Error('messages 必须是非空数组');
   }
 
+  let lastError: Error | undefined;
+
+  for (let attempt = 0; attempt <= CALL_MODEL_MAX_RETRIES; attempt++) {
+    try {
+      return await callModelOnce({
+        messages,
+        maxTokens,
+        config,
+        signal,
+        responseFormat,
+      });
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+
+      if (attempt >= CALL_MODEL_MAX_RETRIES) {
+        break;
+      }
+
+      // 指数退避：1s, 2s, 4s... 上限 30s
+      const delayMs = Math.min(1000 * 2 ** attempt, 30000);
+      console.warn(
+        `[callModel] 第 ${attempt + 1} 次调用失败，${delayMs}ms 后重试: ${lastError.message}`
+      );
+      await sleep(delayMs, signal);
+
+      // 如果 signal 已触发，直接抛出；避免继续无意义重试
+      if (signal?.aborted) {
+        throw lastError;
+      }
+    }
+  }
+
+  throw lastError ?? new Error('调用模型失败');
+}
+
+interface CallModelOnceOptions {
+  messages: Message[];
+  maxTokens?: number;
+  config: ModelConfig;
+  signal?: AbortSignal;
+  responseFormat?: JsonSchemaFormat;
+}
+
+async function callModelOnce({
+  messages,
+  maxTokens,
+  config,
+  signal,
+  responseFormat,
+}: CallModelOnceOptions): Promise<string> {
   const url = `${config.baseUrl}/v1/messages`;
   const body: Record<string, unknown> = {
     model: config.model,
@@ -209,20 +263,37 @@ function normalizeContentBlock(block: ContentBlock): ContentBlock {
     throw new Error('content block 必须包含 type 字段');
   }
 
-  if (
-    block.type === 'image' &&
-    block.source &&
-    block.source.type === 'base64' &&
-    (Buffer.isBuffer(block.source.data) || block.source.data instanceof Uint8Array)
-  ) {
-    return {
-      ...block,
-      source: {
-        ...block.source,
-        data: Buffer.from(block.source.data as Uint8Array).toString('base64'),
-      },
-    };
+  if (block.type === 'image' && block.source && block.source.type === 'base64') {
+    const rawData = block.source.data as unknown as Buffer | Uint8Array;
+    if (Buffer.isBuffer(rawData) || rawData instanceof Uint8Array) {
+      return {
+        ...block,
+        source: {
+          ...block.source,
+          data: Buffer.from(rawData).toString('base64'),
+        },
+      };
+    }
   }
 
   return block;
+}
+
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(signal.reason);
+      return;
+    }
+
+    const timer = setTimeout(resolve, ms);
+
+    if (signal) {
+      const onAbort = () => {
+        clearTimeout(timer);
+        reject(signal.reason);
+      };
+      signal.addEventListener('abort', onAbort, { once: true });
+    }
+  });
 }

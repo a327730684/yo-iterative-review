@@ -3,13 +3,14 @@ import { runIterative } from './lib/iterative.ts';
 import { parseCliArgs, getProjectDir, generateRandom6 } from './lib/utils.ts';
 import { createLogger } from './lib/log-state.ts';
 import { join } from 'node:path';
-
-const DEFAULT_MAX_REVIEW_COUNT = 1;
-const DEFAULT_AGENT = 'implementer';
+import {
+  DEFAULT_MAX_REVIEW_COUNT,
+  DEFAULT_AGENT,
+} from './env.ts';
 
 async function main(): Promise<void> {
   const { requirements, flags } = parseCliArgs(process.argv);
-  
+
   if (!requirements) {
     console.error('用法: node --experimental-strip-types iterative-runner/iterative.ts [--agent <name>] [--max-review-count N] "<需求描述>"');
     process.exit(1);

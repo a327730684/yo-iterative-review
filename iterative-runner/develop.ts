@@ -5,11 +5,12 @@ import { callModel } from './lib/call-model.ts';
 import { parseCliArgs, getProjectDir, generateRandom6 } from './lib/utils.ts';
 import { createLogger } from './lib/log-state.ts';
 import { join } from 'node:path';
-
-const DEFAULT_MAX_REVIEW_COUNT = 1;
-const DEFAULT_MAX_TEST_COUNT = 2;
-const DEFAULT_AGENT = 'implementer';
-const DEFAULT_TEST_AGENT = 'tester';
+import {
+  DEFAULT_MAX_REVIEW_COUNT,
+  DEFAULT_MAX_TEST_COUNT,
+  DEFAULT_AGENT,
+  DEFAULT_TEST_AGENT,
+} from './env.ts';
 
 async function main(): Promise<void> {
   const { requirements, flags } = parseCliArgs(process.argv);

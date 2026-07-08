@@ -5,21 +5,16 @@ import { mkdir, writeFile, readdir, readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Logger } from './log-state.ts';
+import {
+  DEFAULT_MAX_REVIEW_COUNT,
+  DEFAULT_MAX_FIX_ATTEMPTS,
+  DEFAULT_AGENT,
+  COMPLETED_CHECK_SCHEMA,
+} from '../env.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const DEFAULT_MAX_REVIEW_COUNT = 1;
-const DEFAULT_MAX_FIX_ATTEMPTS = 3;
-const DEFAULT_AGENT = 'implementer';
 const REVIEWER_SCHEMA_PATH = join(__dirname, '..', 'schemas', 'reviewer-schema.json');
-const COMPLETED_CHECK_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    completed: { type: 'boolean' },
-  },
-  required: ['completed'],
-} as const;
 
 export interface ReviewFinding {
   issue: string;

@@ -21,7 +21,7 @@ User input: `$ARGUMENTS`
    Example:
 
    ```bash
-   node iterative-runner/iterative.ts "Implement a JWT login API: email+password verification, return tokens, bcrypt, rate limiting" --max-review-count 3
+   node ${CLAUDE_PLUGIN_ROOT}/iterative-runner/iterative.ts "Implement a JWT login API: email+password verification, return tokens, bcrypt, rate limiting" --max-review-count 3
    ```
 
    **IMPORTANT: This loop is long-running (implement + multiple review/fix rounds, often many minutes). You MUST run it in background mode** (Bash tool with `run_in_background: true`), never as a blocking foreground call. After launching, set up a monitor (or periodically read the output file) so you are notified when it finishes, and keep the user informed of progress instead of blocking.

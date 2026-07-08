@@ -5,21 +5,16 @@ import { mkdir, writeFile, readdir, readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Logger } from './log-state.ts';
+import {
+  DEFAULT_MAX_TEST_COUNT,
+  DEFAULT_MAX_FIX_ATTEMPTS,
+  DEFAULT_TEST_AGENT,
+  COMPLETED_CHECK_SCHEMA,
+} from '../env.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const DEFAULT_MAX_TEST_COUNT = 2;
-const DEFAULT_MAX_FIX_ATTEMPTS = 3;
-const DEFAULT_TEST_AGENT = 'tester';
 const TESTER_SCHEMA_PATH = join(__dirname, '..', 'schemas', 'tester-schema.json');
-const COMPLETED_CHECK_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    completed: { type: 'boolean' },
-  },
-  required: ['completed'],
-} as const;
 
 export interface TestFailure {
   case: string;
