@@ -6,7 +6,7 @@
 
 ```bash
 claude plugin marketplace add https://github.com/a327730684/yo-iterative-review
-claude plugin install voyоwork@voyo-marketplace
+claude plugin install voyowork@voyo-marketplace
 ```
 更新插件
 ```
@@ -41,3 +41,5 @@ CLI 直接用法与参数见 [iterative-runner/readme.md](iterative-runner/readm
 ## 工具集（Skills）
 
 yo-web-search、yo-md2html、yo-pdf2md，见 [readme/skills.md](readme/skills.md)。
+
+

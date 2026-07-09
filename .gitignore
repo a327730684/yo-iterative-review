@@ -40,3 +40,4 @@ work-flow/
 
 __pycache__/
 settings.*.json
+.npmrc
