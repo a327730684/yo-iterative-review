@@ -8,6 +8,12 @@
 claude plugin marketplace add https://github.com/a327730684/yo-iterative-review
 claude plugin install voyоwork@voyo-marketplace
 ```
+更新插件
+```
+claude plugin marketplace update voyo-marketplace
+```
+
+
 
 若 `claude plugin install` 安装失败，在 Claude Code 交互模式下改用：
 
