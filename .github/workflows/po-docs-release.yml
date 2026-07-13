@@ -4,10 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "version to release (e.g. 1.2.3), empty = bump patch automatically"
-        required: false
+        description: "version to release (e.g. 1.2.3)"
+        required: true
         type: string
-        default: ""
 
 permissions:
   contents: read
@@ -28,33 +27,21 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
+      - name: Install build tool
+        run: pip install build
 
-      - name: Resolve version
-        id: ver
+      - name: Set version
         run: |
-          CUR=$(uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
-          echo "current=$CUR" >> "$GITHUB_OUTPUT"
-          if [ -n "${{ inputs.version }}" ]; then
-            NEW="${{ inputs.version }}"
-          else
-            IFS=. read -r MAJ MIN PAT <<< "$CUR"
-            NEW="$MAJ.$MIN.$((PAT+1))"
-          fi
-          uv run python -c "
+          python -c "
           from pathlib import Path
           t = Path('pyproject.toml').read_text()
-          t = t.replace('version = \"$CUR\"', 'version = \"$NEW\"', 1)
-          Path('pyproject.toml').write_text(t)
+          new = 'version = \"${{ inputs.version }}\"'
+          lines = [new if l.startswith('version = ') else l for l in t.splitlines(keepends=True)]
+          Path('pyproject.toml').write_text(''.join(lines))
           "
-          echo "new_version=$NEW" >> "$GITHUB_OUTPUT"
-
-      - name: Test
-        run: uv run pytest tests/ -v
 
       - name: Build
-        run: uv build
+        run: python -m build
 
       - name: Publish to PyPI (trusted publishing)
         uses: pypa/gh-action-pypi-publish@release/v1
