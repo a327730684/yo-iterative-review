@@ -18,33 +18,18 @@ const server = new McpServer({
 
 // ========== 辅助：统一错误处理 ==========
 
-interface CallToolResult {
-  [key: string]: unknown;
-  content: Array<{ type: 'text'; text: string }>;
-  isError?: boolean;
-}
-
-function textResult(text: string, isError = false): CallToolResult {
+function textResult(text, isError = false) {
   return {
     content: [{ type: 'text', text }],
     isError,
   };
 }
 
-function jsonResult(data: unknown): CallToolResult {
+function jsonResult(data) {
   return textResult(JSON.stringify(data, null, 2));
 }
 
-function safeExecute(fn: () => CallToolResult): CallToolResult {
-  try {
-    return fn();
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return textResult(`错误: ${msg}`, true);
-  }
-}
-
-async function safeExecuteAsync(fn: () => Promise<CallToolResult>): Promise<CallToolResult> {
+async function safeExecuteAsync(fn) {
   try {
     return await fn();
   } catch (err) {
@@ -159,6 +144,8 @@ async function main() {
   await server.connect(transport);
   console.error('orchestrate-impl MCP Server 已启动');
 }
+
+export { main };
 
 main().catch(err => {
   console.error('MCP Server 启动失败:', err);

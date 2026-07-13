@@ -9,7 +9,7 @@
   "mcpServers": {
     "orchestrate-impl": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/index.ts"]
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcps/orchestrate-impl-mcp/index.mjs"]
     },
     "yo-docs-mcp": {
       "command": "node",
