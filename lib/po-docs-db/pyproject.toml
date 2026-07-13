@@ -1,0 +1,24 @@
+[project]
+name = "po-docs-db"
+version = "0.1.0"
+description = "基于关键词匹配的文档知识库，使用 jieba 分词 + SQLite 倒排索引"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "jieba>=0.42.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/po_docs_db"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
