@@ -15,6 +15,11 @@
       "command": "node",
       "args": ["${CLAUDE_PLUGIN_ROOT}/mcps/yo-docs-mcp/src/index.ts"],
       "env": {}
+    },
+    "yo-tools-mcp": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcps/yo-tools-mcp/src/index.ts"],
+      "env": {}
     }
   }
 }

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { runIterative } from './lib/iterative.ts';
 import { runTestLoop } from './lib/test-loop.ts';
-import { callModel } from './lib/call-model.ts';
+import { callModel } from './lib/call-model/index.ts';
 import { parseCliArgs, getProjectDir, generateRandom6 } from './lib/utils.ts';
 import { createLogger } from './lib/log-state.ts';
 import { join } from 'node:path';
@@ -128,7 +128,7 @@ async function deriveTestRequirements(requirements: string, implSummary: string)
     implSummary,
   ].join('\n');
 
-  return callModel({
+  return callModel.call({
     messages: [{ role: 'user', content: prompt }],
   });
 }

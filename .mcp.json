@@ -1,14 +1,4 @@
 {
     "mcpServers": {
-       "excel": {
-        "command": "npx",
-        "args": ["-y", "@zhiweixu/excel-mcp-server"],
-        "env": {}
-        },
-        "yo-docs-mcp": {
-            "command": "node",
-            "args": ["/Users/momo/workspace/claude-plugins/iterative-review/mcps/yo-docs-mcp/src/index.ts"],
-            "env": {}
-        }
     }
 }
