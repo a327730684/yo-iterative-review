@@ -1,5 +1,6 @@
 {
   "name": "voyowork",
+  "version": "0.0.1",
   "description": "Structured implementation-review loop: implementer writes code, reviewer finds itemized defects, implementer accepts or rejects each finding (only modifies accepted ones), reviewer continues finding new issues until none remain.",
   "author": {
     "name": "zhantewei",
@@ -8,7 +9,17 @@
   "mcpServers": {
     "orchestrate-impl": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/index.ts"]
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcps/orchestrate-impl-mcp/index.mjs"]
+    },
+    "yo-docs-mcp": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcps/yo-docs-mcp/src/index.ts"],
+      "env": {}
+    },
+    "yo-tools-mcp": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcps/yo-tools-mcp/src/index.ts"],
+      "env": {}
     }
   }
 }

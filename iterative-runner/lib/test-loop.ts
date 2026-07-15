@@ -1,25 +1,20 @@
 /// <reference types="node" />
 import { runClaudeAgent, runClaudeTextAgent } from './claude-spawn.ts';
-import { callModel } from './call-model.ts';
+import { callModel } from './call-model/index.ts';
 import { mkdir, writeFile, readdir, readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Logger } from './log-state.ts';
+import {
+  DEFAULT_MAX_TEST_COUNT,
+  DEFAULT_MAX_FIX_ATTEMPTS,
+  DEFAULT_TEST_AGENT,
+  COMPLETED_CHECK_SCHEMA,
+} from '../env.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const DEFAULT_MAX_TEST_COUNT = 2;
-const DEFAULT_MAX_FIX_ATTEMPTS = 3;
-const DEFAULT_TEST_AGENT = 'tester';
 const TESTER_SCHEMA_PATH = join(__dirname, '..', 'schemas', 'tester-schema.json');
-const COMPLETED_CHECK_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    completed: { type: 'boolean' },
-  },
-  required: ['completed'],
-} as const;
 
 export interface TestFailure {
   case: string;
@@ -200,7 +195,7 @@ async function generateIssueFile(failures: TestFailure[], filePath: string): Pro
     JSON.stringify(failures, null, 2),
   ].join('\n');
 
-  const markdown = await callModel({
+  const markdown = await callModel.call({
     messages: [{ role: 'user', content: prompt }],
   });
 
@@ -222,7 +217,7 @@ async function checkIssueFileCompleted(filePath: string): Promise<boolean> {
     '```',
   ].join('\n');
 
-  const result = await callModel({
+  const result = await callModel.call({
     messages: [{ role: 'user', content: prompt }],
     responseFormat: { type: 'json_schema', schema: COMPLETED_CHECK_SCHEMA },
   });
@@ -259,7 +254,7 @@ async function summarizeAllRounds(tmpDir: string): Promise<string> {
     contents.join('\n\n---\n\n'),
   ].join('\n');
 
-  return callModel({
+  return callModel.call({
     messages: [{ role: 'user', content: prompt }],
   });
 }

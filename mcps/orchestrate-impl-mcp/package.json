@@ -1,0 +1,26 @@
+{
+  "name": "orchestrate-impl",
+  "version": "1.0.0",
+  "description": "MCP Server for Implementation Orchestrator - manages design docs, implementation plans, and subagent dispatching",
+  "type": "module",
+  "main": "index.ts",
+  "bin": {
+    "orchestrate-impl": "index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node index.ts",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0",
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

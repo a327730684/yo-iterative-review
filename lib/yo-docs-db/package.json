@@ -1,0 +1,26 @@
+{
+  "name": "@voyo/docs-db",
+  "version": "1.0.1",
+  "description": "基于关键词匹配的文档知识库，使用 jieba 分词 + SQLite 倒排索引",
+  "type": "module",
+  "main": "dist/index.mjs",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/index.mjs",
+    "test": "node tests/run-all.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@node-rs/jieba": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.28.1"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "yo-tools-mcp",
+  "version": "1.0.0",
+  "description": "通用工具集 MCP Server，提供模型调用等基础能力",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node --experimental-strip-types src/index.ts",
+    "check": "node --experimental-strip-types --check src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
