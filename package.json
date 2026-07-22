@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/a327730684/yo-iterative-review#readme",
   "dependencies": {
-    "cross-spawn": "^7.0.6"
+    "cross-spawn": "^7.0.6",
+    "marked": "^18.0.7"
   }
 }

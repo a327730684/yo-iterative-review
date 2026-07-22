@@ -15,7 +15,7 @@ build/
 .venv/
 venv/
 env/
-
+.playwright-mcp/
 # IDE
 .idea/
 .vscode/

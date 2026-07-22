@@ -32,27 +32,30 @@ function htmlTemplate(title, body) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${title}</title>
 <style>
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 980px; margin: 40px auto; padding: 0 24px; color: #24292f; background: #fff; }
-h1, h2, h3, h4 { border-bottom: 1px solid #d0d7de; padding-bottom: .3em; margin-top: 1.5em; margin-bottom: 1em; }
-h1 { font-size: 2em; border-bottom-width: 2px; }
-pre { background: #f6f8fa; padding: 16px; overflow: auto; border-radius: 6px; font-size: 85%; line-height: 1.45; }
-code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 85%; background: #f6f8fa; padding: .2em .4em; border-radius: 3px; }
-pre code { background: transparent; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.8; max-width: 880px; margin: 40px auto; padding: 0 24px; color: #2b2b2b; background: #faf7f2; }
+h1, h2, h3, h4 { color: #1a1a1a; margin-top: 1.6em; margin-bottom: .9em; }
+h1 { font-size: 2em; }
+h2 { border-bottom: 1px solid #e9e2d8; padding-bottom: .35em; position: relative; }
+h2::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 56px; height: 3px; background: #f0a030; border-radius: 2px; }
+pre { background: #f7ecdc; padding: 16px; overflow: auto; border-radius: 6px; font-size: 85%; line-height: 1.45; border: 1px solid #e8d5b5; }
+code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 85%; background: #f7ecdc; padding: .2em .4em; border-radius: 3px; color: #b0503c; }
+pre code { background: transparent; padding: 0; color: inherit; }
 table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-th, td { border: 1px solid #d0d7de; padding: 8px 12px; }
-th { background: #f6f8fa; font-weight: 600; }
-blockquote { border-left: 4px solid #d0d7de; color: #656d76; padding-left: 16px; margin-left: 0; }
-hr { border: 0; border-top: 1px solid #d0d7de; margin: 24px 0; }
-a { color: #0969da; text-decoration: none; }
+th, td { border: 1px solid #e8d5b5; padding: 8px 12px; }
+th { background: #f7ecdc; font-weight: 600; color: #8c5a2b; }
+tr:nth-child(even) { background: #faf1e3; }
+blockquote { border-left: 4px solid #d9a05b; color: #7a6a58; background: #faf1e3; padding: 4px 16px; margin-left: 0; border-radius: 0 6px 6px 0; }
+hr { border: 0; border-top: 1px solid #e8d5b5; margin: 24px 0; }
+a { color: #c2703d; text-decoration: none; }
 a:hover { text-decoration: underline; }
-.mermaid { background: #fff; text-align: center; }
+.mermaid { background: transparent; text-align: center; }
 .mermaid svg { max-width: 100%; height: auto; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    mermaid.initialize({ startOnLoad: true, theme: 'default' });
-  });
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script type="module">
+  import elkLayouts from 'https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0/dist/mermaid-layout-elk.esm.min.mjs';
+  mermaid.registerLayoutLoaders(elkLayouts);
+  mermaid.initialize({ startOnLoad: true, theme: 'neo', look: 'neo' });
 </script>
 </head>
 <body>
@@ -65,7 +68,7 @@ function convertMarkdown(mdContent, markedInstance) {
   // Extract mermaid blocks before markdown parsing
   const mermaids = [];
   const placeholder = (idx) => `<!-- MERMAID_${idx} -->`;
-  let cleaned = mdContent.replace(/```mermaid\s*\n([\s\S]*?)```/g, (match, code) => {
+  let cleaned = mdContent.replace(/```mermaid\s*\n([\s\S]*?)```/g, (_, code) => {
     const idx = mermaids.length;
     mermaids.push(code.trim());
     return placeholder(idx);
