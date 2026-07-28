@@ -1,5 +1,5 @@
 ---
-name: review-manager
+name: xxl-review-manager
 description: 代码review管理agent（yo-dev-xxl专用）。调度reviewer与code agent循环检查并修复代码问题，直到全部通过。 需传入side参数（frontend/backend）。
 model: inherit
 color: purple

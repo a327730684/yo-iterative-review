@@ -1,5 +1,5 @@
 ---
-name: supervisor
+name: xxl-supervisor
 description: 监管agent（yo-dev-xxl专用）。调度前后端代码agent按大功能模块逐模块完成开发任务。按模块优先级协调前后端配合，完成后标记plan文件plan_{backend|frontend}.md
 model: inherit
 color: yellow

@@ -14,7 +14,7 @@ User input: `$ARGUMENTS`
 
 2. **Build and run the command (background mode)**
 
-   Parameters supported by `node iterative-runner/iterative.ts`:
+   Parameters supported by `node iterative-runner/lib/iterative.ts`:
    - `--agent <name>`: implement/fix agent, defaults to `implementer`
    - `--max-review-count N`: maximum review rounds, defaults to 1
 
