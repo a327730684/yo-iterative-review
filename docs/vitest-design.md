@@ -39,3 +39,5 @@ test{
      setupFiles: ['vitest.setup.ts']
 }
 ```
+
+## 使用@vue/test-utils 测试vue组件的dom操作
