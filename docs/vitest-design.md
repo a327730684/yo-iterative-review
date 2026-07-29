@@ -41,3 +41,35 @@ test{
 ```
 
 ## 使用@vue/test-utils 测试vue组件的dom操作
+
+大体使用介绍
+```js
+
+import {mount} from "@vue/test-utils";
+
+test("test AComponent", async ()=>{
+     const wrapper=mount(AComponent);
+     const aComponent:any=wrapper.vm; //获取组件实例。
+
+     const confirmButton=wrapper.findComponent("[data-test="confirm-button"]"); // 获取按钮 比如<el-button data=test="confirm-button"></el-button>
+
+     confirmButton.trigger("click"); // 触发点击事件
+
+     const state= aComponent.state;  //获取组件中定义的 state= reactive({...});
+
+     aComponent.confirm();  // 调用组件中定义的 const confirm= ()=>{};  方法。
+
+})
+```
+针对dialog/modal的测试：
+
+```js
+pageWrapper.findComponent("input"); // input存在于dialog 中，而dialog teleport 到 body ， 此处无法直接获取到input元素。
+
+pageWrapper.getComponent("el-dialog");  // 
+
+```
+
+
+注意： 大多数的页面级别的component， 直接通过mount此component完成测试， 除非组件需要从vue router中获取参数。
+
