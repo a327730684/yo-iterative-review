@@ -102,6 +102,40 @@ const state = reactive({
 
 
 
+## 可测试性约定（data-test）
+
+编写组件时同步为测试预留稳定的定位锚点，供 vitest + @vue/test-utils 通过 `find('[data-test="..."]')` 查找。
+
+### 哪些节点必须加
+
+- **交互元素**：button、input、select、checkbox、link 等所有用户可操作的控件
+- **表单关键动作**：提交、重置、取消按钮
+- **弹窗动作**：确认、关闭按钮（写在弹窗组件内）
+- **列表条目**：循环渲染的行/卡片，值建议带上业务标识，如 `data-test="user-item"`
+- **关键状态展示**：数量、状态徽标、错误提示等需要断言的节点
+
+纯装饰性、无需测试断言的元素不必加。
+
+### 命名与使用规范
+
+1. **kebab-case、语义化**：描述动作或内容，如 `data-test="confirm-button"`、`data-test="username-input"`，不随样式、文案变化
+2. **唯一性**：同一组件内同一用途只用一个值，避免测试命中多个节点
+3. **禁止脆弱选择器**：测试不得依赖 DOM 层级、class 名、文本内容定位（重构即失效）
+4. **组件库透传**：Element Plus 等组件上直接写 `data-test`，会透传到根元素，如 `<el-button data-test="confirm-button">`
+
+```vue
+<template>
+  <el-input v-model="state.name" data-test="name-input" />
+  <el-button data-test="confirm-button" @click="submit">确定</el-button>
+</template>
+```
+
+```typescript
+// 测试侧定位
+const confirmButton = wrapper.find('[data-test="confirm-button"]')
+await confirmButton.trigger('click')
+```
+
 ## 编码检查清单
 
 - [ ] 样式值是否使用了 CSS 变量？
@@ -110,3 +144,4 @@ const state = reactive({
 - [ ] 状态是否使用 reactive 而非 ref？
 - [ ] 图标是否按需懒加载？
 - [ ] 类型是否完整定义（无 any）？
+- [ ] 交互元素与关键断言节点是否加了 data-test？
