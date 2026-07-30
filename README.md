@@ -25,15 +25,14 @@ claude plugin marketplace update voyo-marketplace
 
 | 命令 | 说明 |
 |---|---|
-| `/voyowork:iterative <需求>` | 实现—审查—修复循环，直到通过或达到轮数上限 |
-| `/voyowork:test-loop <需求>` | 针对已有代码的测试—修复循环 |
-| `/voyowork:develop <需求>` | 实现审查 + 测试 一条龙（iterative → 自动生成测试需求 → test-loop）|
-| `/voyowork:orchestrate <需求>` | 结构化设计 + 任务编排流程，拆解为设计文档与实施计划分派执行 |
+| `/voyowork:iterative <需求> [--agent <name>] [--max-review-count N]` | 实现—审查—修复循环，直到通过或达到轮数上限 |
+| `/voyowork:dev-sm <需求>` | 开发一个小功能 |
+| `/voyowork:dev-xxl <需求>` | 大型功能开发：设计 → 实现 → review → 测试 全流程（调用 `yo-dev-xxl` skill） |
 
 示例：
 
 ```
-/voyowork:develop 实现一个 JWT 用户登录 API，邮箱+密码验证、bcrypt 哈希、返回 access/refresh token
+/voyowork:dev-xxl 实现一个 JWT 用户登录 API，邮箱+密码验证、bcrypt 哈希、返回 access/refresh token
 ```
 
 CLI 直接用法与参数见 [iterative-runner/readme.md](iterative-runner/readme.md)。
@@ -41,5 +40,7 @@ CLI 直接用法与参数见 [iterative-runner/readme.md](iterative-runner/readm
 ## 工具集（Skills）
 
 yo-web-search、yo-md2html、yo-pdf2md，见 [readme/skills.md](readme/skills.md)。
+
+另有开发流程与测试类 skill：`yo-dev-xxl`（大型功能开发流程）、`yo-vitest`（前端 vitest 测试）。
 
 
