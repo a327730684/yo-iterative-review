@@ -102,6 +102,32 @@ const state = reactive({
 
 
 
+## 可测试性规范（vitest + @vue/test-utils）
+
+组件必须便于 `wrapper.find` / `component.find` 查找并触发事件。
+
+### data-test 标记
+
+关键交互节点必须添加 `data-test="xxx"` 标记（kebab-case，语义化命名）：
+
+```vue
+<template>
+  <el-input v-model="state.keyword" data-test="keyword-input" />
+  <el-button type="primary" @click="confirm" data-test="confirm-button" />
+</template>
+```
+
+需要标记的节点：
+- 表单控件：input、select、checkbox 等
+- 按钮：确认、取消、提交等操作入口
+- 弹窗容器：dialog/modal 的内容区域
+- 其他测试中需要断言或触发事件的节点
+
+### 状态与方法暴露
+
+- 状态统一收敛在 `const state = reactive({...})` 中，测试可直接通过 `wrapper.vm.state` 断言
+- 关键方法（如 `const confirm = () => {}`）定义在 setup 顶层，测试可通过 `wrapper.vm.confirm()` 直接调用
+
 ## 编码检查清单
 
 - [ ] 样式值是否使用了 CSS 变量？
@@ -110,3 +136,5 @@ const state = reactive({
 - [ ] 状态是否使用 reactive 而非 ref？
 - [ ] 图标是否按需懒加载？
 - [ ] 类型是否完整定义（无 any）？
+- [ ] 关键交互节点是否添加了 `data-test` 标记？
+- [ ] 状态是否收敛在 `state` 中、方法是否可被测试直接调用？

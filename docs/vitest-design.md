@@ -62,14 +62,17 @@ test("test AComponent", async ()=>{
 })
 ```
 针对dialog/modal的测试：
+`vitest.setup.ts` 中配置`config.global.stubs= {teleport: true}` , 保证dialog/modal可以原处渲染，这样实际dom位置可能与真实brower不一致，但保证我们在dialog这个元素或pageWrapper下可以get到指定的node.
+
 
 ```js
-pageWrapper.findComponent("input"); // input存在于dialog 中，而dialog teleport 到 body ， 此处无法直接获取到input元素。
+pageWrapper.find("input"); // input node 存在于dialog 中，而dialog teleport 到 body ， 此处无法直接获取到input元素。
+const dialogComponent=pageWrapper.getComponent("el-dialog");  // 获取dialog组件实例
 
-pageWrapper.getComponent("el-dialog");  // 
-
+dialogComponent.find('button[data-test="confirm-button"]'); // 获取 diallog中的确认按钮
 ```
 
 
-注意： 大多数的页面级别的component， 直接通过mount此component完成测试， 除非组件需要从vue router中获取参数。
+注意： 
 
+- 大多数的页面级别的component， 直接通过mount此component完成测试， 除非组件需要从vue router中获取参数。
