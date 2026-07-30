@@ -63,6 +63,7 @@ color: teal
 - 按照 `大功能`，逐一按顺序执行测试，每个大功能，spawn **(前端|后端)agent** （即每次subagent只负责一个大功能的测试， 完成一个大功能的测试后，继续spawn一个subagent来处理下一个大功能的测试）。
   - 要求其读取`feature.md`,`plan_{side}.md`。
   - 告知其当前被分配的`大功能`。要求执行相关测试。并在测试出现问题时，主动修复，直到提供给此subagent的`大功能`均通过测试，或承认无法解决。
+  - 关于前端测试，当前端使用 vue 框架时，要求subagent 按照yo-vitest skill 中的指南完成测试。
 
 每次spwan的subagent只处理一个大功能测试，处理完后，此subagent返回此大功能的测试与修复情况：是否通过修复，无法解决的说明原因。你根据它返回的情况，去更新 `test-plan_{side}.md` 中的 checkbox。checkbox的状态可以为：通过，无法解决（后面标注原因）。
 直到plan中的所有功能点都完成标注，则结束测试流程。

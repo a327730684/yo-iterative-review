@@ -39,3 +39,40 @@ test{
      setupFiles: ['vitest.setup.ts']
 }
 ```
+
+## 使用@vue/test-utils 测试vue组件的dom操作
+
+大体使用介绍
+```js
+
+import {mount} from "@vue/test-utils";
+
+test("test AComponent", async ()=>{
+     const wrapper=mount(AComponent);
+     const aComponent:any=wrapper.vm; //获取组件实例。
+
+     const confirmButton=wrapper.findComponent("[data-test="confirm-button"]"); // 获取按钮 比如<el-button data=test="confirm-button"></el-button>
+
+     confirmButton.trigger("click"); // 触发点击事件
+
+     const state= aComponent.state;  //获取组件中定义的 state= reactive({...});
+
+     aComponent.confirm();  // 调用组件中定义的 const confirm= ()=>{};  方法。
+
+})
+```
+针对dialog/modal的测试：
+`vitest.setup.ts` 中配置`config.global.stubs= {teleport: true}` , 保证dialog/modal可以原处渲染，这样实际dom位置可能与真实brower不一致，但保证我们在dialog这个元素或pageWrapper下可以get到指定的node.
+
+
+```js
+pageWrapper.find("input"); // input node 存在于dialog 中，而dialog teleport 到 body ， 此处无法直接获取到input元素。
+const dialogComponent=pageWrapper.getComponent("el-dialog");  // 获取dialog组件实例
+
+dialogComponent.find('button[data-test="confirm-button"]'); // 获取 diallog中的确认按钮
+```
+
+
+注意： 
+
+- 大多数的页面级别的component， 直接通过mount此component完成测试， 除非组件需要从vue router中获取参数。
