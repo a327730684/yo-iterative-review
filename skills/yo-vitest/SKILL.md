@@ -93,6 +93,35 @@ pageWrapper.find("input");
 pageWrapper.find('button[data-test="confirm-button"]');
 ```
 
+## 四、测试 router 下的页面
+
+优先使用项目**原始 router**，不要 mock route。封装 `mountWithRouter`：
+
+```ts
+import router from "@/router"; // 项目原始 router
+
+export async function mountWithRouter(component: any, path: string) {
+  router.push(path);
+  await router.isReady();
+  return mount(component, { global: { plugins: [router] } });
+}
+```
+
+原始 router 无法完成测试时（如引入报错、依赖环境过多），退而使用 `createRouter` 构造 mock router，仅注册被测页面所需的路由。
+注意： 页面在router下，通过mountWithRouter方式挂载，可以将整个路径跑通，但注意不要重复去测试路由逻辑，主要关注组件本身的业务逻辑测试。
+
+### 路由 guard 拦截
+
+为了通过 guard，优先改动全局状态，而不是绕过路由：
+- 用 `vi.mock` 修改 guard 依赖的模块状态
+- 或向 `localStorage` 写入状态
+- 先查看项目中 guard 实际判断的依据（如登录态、用户 token 值），按真实依据写入
+
+## 五、运行测试
+
+- 只针对单个文件运行：`npx vitest run vitest_test/[feature].test.ts`
+- 除非用户明确要求，否则不要全量运行所有测试文件
+
 ## 注意事项
 
-- 大多数页面级 component 直接 `mount` 即可完成测试，除非组件需要从 vue router 中获取参数（此时需传入 router 插件或 mock route）。
+- 页面级组件（挂在 router 下的）用 `mountWithRouter`（见第四节）；与路由无关的普通组件直接 `mount` 即可。
