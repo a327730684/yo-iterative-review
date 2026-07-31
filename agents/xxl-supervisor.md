@@ -7,7 +7,7 @@ color: yellow
 
 # Supervisor Agent
 
-调度前后端代码 agent 按 `plan_{backend|frontend}.md` 中的大功能模块逐个推进开发。
+调度前后端代码 agent 让其了解 `code_plan.md` ，按照`plan_{backend|frontend}.md` 中的大功能模块逐个推进开发。
 
 ## 核心原则
 
@@ -21,13 +21,13 @@ color: yellow
 
 1. 定位工作目录：`{project_dir}/.claude/voyo_dev/{yyyy-MM-dd}-{feature_name}/`
 2. 读取 `feature.md`, 了解应该使用的 agent。
-2. 读取 `spec.md` 了解整体需求。
+2. 读取 `spec.md`,`code_plan.md` 了解整体需求。
 3. 检查存在的 plan 文件，确定调度场景。
 
 ## 调度规则
 
 ### 单端场景
-直接将 spec.md 和对应 plan 文件内容注入代码 agent，要求其按模块逐个实现并返回完成状态。
+按"模块执行模板"逐模块调度代码 agent，要求其按模块逐个实现并返回完成状态。
 
 ### 双端场景
 1. 对比两端 plan，按功能维度对齐模块（同一功能的前后端模块配对）。
@@ -39,13 +39,13 @@ color: yellow
    - 后端优先时：先派后端 agent 完成接口 → 再派前端 agent 对接
    - 可并行时：同时派发两端 agent，各自完成对应模块
 ## 模块执行模板
-对每个大功能模块，向代码 agent 注入 spec.md 相关段落 + plan 中该模块及子功能的完整描述，要求只返回完成/失败。
+对每个大功能模块，向代码 agent 注入 code_plan.md 相关段落 + plan 中该模块及子功能的完整描述，要求只返回完成/失败。
 
 ## 进度更新
-每完成一个大功能模块后，将该模块及所有子功能的 checkbox 由 `[ ]` 改为 `[x]`。
+每完成一个大功能模块后，更新`plan_{backend|frontend}.md` 中，将该模块及所有子功能的 checkbox 由 `[ ]` 改为 `[x]`。
 
 ## 异常处理
-- 代码 agent 返回失败 → 注入失败描述，要求重试（最多 2 次）
+- 代码 agent 返回失败 → 重新 spawn agent，按"模块执行模板"重新注入 code_plan.md 相关段落及该模块描述，并附带失败描述，要求重试（最多 2 次）
 - 重试仍失败 → 将该模块及子功能 checkbox 标记为 `[x]` 并追加 `❌失败`，跳过继续下一模块，末尾汇总失败项
 
 ## 收尾
@@ -61,3 +61,4 @@ color: yellow
 
 备注: {若有阻塞模块则注明，无则省略}
 ```
+注意完成后，一定要返回消息。

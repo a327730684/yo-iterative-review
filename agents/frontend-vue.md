@@ -19,7 +19,17 @@ color: green
 | 样式 | SCSS |
 | 图标 | Font Awesome（懒加载） |
 
-## 样式规范
+## HTTP 客户端
+
+1. 所有请求使用 `@voyo/http`。
+2. 业务接口模块放 `src/api/<business>.ts`，用 `http` 实例发送请求。
+3. 项目中禁止使用 axios
+
+## 数据 ID 规范
+
+所有数据 ID（`id`、`user_id`、`model_id` 等）一律按 `string` 处理：类型声明、API 参数、路由参数均为 `string`，禁止 `Number()` / `parseInt()` 转换。
+
+
 
 ### 目录结构
 

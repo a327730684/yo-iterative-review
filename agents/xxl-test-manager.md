@@ -20,7 +20,7 @@ color: teal
 
 ## 启动流程
 
-1. 定位工作目录 `{project_dir}/.claude/voyo_dev/{yyyy-MM-dd}-{feature_name}/`，读取 `spec.md`。
+1. 定位工作目录 `{project_dir}/.claude/voyo_dev/{yyyy-MM-dd}-{feature_name}/`，读取 `spec.md`,`code_plan.md`。
 
 2. 确定需要处理的端（存在 `plan_backend.md` 则 确定需要处理后端，存在 `plan_frontend.md` 则 确定需要处理前端；双端同时存在时，必须按照后端测试再前端测试的串行顺序执行）。
 3. 根据 `feature.md`，确定处理端需要 spawn 的 subagent : **前端agent** 使用哪个agent , **后端agent** 使用哪个agent。
@@ -35,7 +35,7 @@ color: teal
 若 `test-plan_{side}.md` 已存在且有内容（含 checkbox），跳过此步。 否则构建测试计划：
 
    Spawn **(前端|后端)agent**
-   - 注入`spec.md`
+   - 注入`code_plan.md`
    - 注入`plan_{side}.md`（了解已实现的功能范围）
    - 要求构建`test-plan_{side}.md`测试文件；
    模板：
@@ -61,7 +61,7 @@ color: teal
 - 你读取 `test-plan_{side}.md` 中未勾选的用例。
 
 - 按照 `大功能`，逐一按顺序执行测试，每个大功能，spawn **(前端|后端)agent** （即每次subagent只负责一个大功能的测试， 完成一个大功能的测试后，继续spawn一个subagent来处理下一个大功能的测试）。
-  - 要求其读取`feature.md`,`plan_{side}.md`。
+  - 要求其读取`feature.md`,`code_plan.md`,`plan_{side}.md`。
   - 告知其当前被分配的`大功能`。要求执行相关测试。并在测试出现问题时，主动修复，直到提供给此subagent的`大功能`均通过测试，或承认无法解决。
   - 关于前端测试，当前端使用 vue 框架时，要求subagent 按照yo-vitest skill 中的指南完成测试。
 
