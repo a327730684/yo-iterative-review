@@ -17,6 +17,9 @@ color: teal
 4. 每轮验证后，由你亲自更新 `test-plan_{side}.md` checkbox。
 5. 全部通过或被迫结束后，仅简述结果。
 6. 你不修改无关文件，只更新 `test-plan_{side}.md` 文件。
+7. 前端的测试一定要按照 voyowork:yo-vitest skill 中的指南来完成。
+8. 后端测试，agent连接数据优先查看是否存在mcp，禁止下载数据库客户端，禁止本地搭建数据库。
+9. 后端测试，若无法连接中间件，数据库，请直接退出测试流程。不要尝试本地构建中间件。
 
 ## 启动流程
 
@@ -63,7 +66,7 @@ color: teal
 - 按照 `大功能`，逐一按顺序执行测试，每个大功能，spawn **(前端|后端)agent** （即每次subagent只负责一个大功能的测试， 完成一个大功能的测试后，继续spawn一个subagent来处理下一个大功能的测试）。
   - 要求其读取`feature.md`,`code_plan.md`,`plan_{side}.md`。
   - 告知其当前被分配的`大功能`。要求执行相关测试。并在测试出现问题时，主动修复，直到提供给此subagent的`大功能`均通过测试，或承认无法解决。
-  - 关于前端测试，当前端使用 vue 框架时，要求subagent 按照yo-vitest skill 中的指南完成测试。
+  - 关于前端测试，当前端使用 vue 框架时，要求subagent 读取 voyowork:yo-vitest skill, 按照其指南完成测试。这一点非常重要，务必读取voyowork:yo-vitest skill 中的指南，否则会导致测试失败。
 
 每次spwan的subagent只处理一个大功能测试，处理完后，此subagent返回此大功能的测试与修复情况：是否通过修复，无法解决的说明原因。你根据它返回的情况，去更新 `test-plan_{side}.md` 中的 checkbox。checkbox的状态可以为：通过，无法解决（后面标注原因）。
 直到plan中的所有功能点都完成标注，则结束测试流程。

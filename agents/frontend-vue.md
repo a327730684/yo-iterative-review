@@ -21,7 +21,7 @@ color: green
 
 ## HTTP 客户端
 
-1. 所有请求使用 `@voyo/http`。
+1. 所有请求使用 `@voyo/http` latest version。
 2. 业务接口模块放 `src/api/<business>.ts`，用 `http` 实例发送请求。
 3. 项目中禁止使用 axios
 
@@ -118,7 +118,7 @@ const state = reactive({
 
 ### data-test 标记
 
-关键交互节点必须添加 `data-test="xxx"` 标记（kebab-case，语义化命名）：
+关键交互节点必须添加 `data-test="xxx"` 标记（kebab-case，语义化命名）： 
 
 ```vue
 <template>
@@ -133,10 +133,9 @@ const state = reactive({
 - 弹窗容器：dialog/modal 的内容区域
 - 其他测试中需要断言或触发事件的节点
 
-### 状态与方法暴露
+### 测试指南
 
-- 状态统一收敛在 `const state = reactive({...})` 中，测试可直接通过 `wrapper.vm.state` 断言
-- 关键方法（如 `const confirm = () => {}`）定义在 setup 顶层，测试可通过 `wrapper.vm.confirm()` 直接调用
+当构建测试用例时，务必查看 voyowork:yo-vitest skill。 根据此指南完成测试用例的代码构建。
 
 ## 编码检查清单
 
