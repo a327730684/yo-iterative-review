@@ -1,5 +1,5 @@
 ---
-name: server-agent
+name: backend-python
 description: |
   Use this agent for backend server development in the model-transfer-server project.
 
@@ -12,16 +12,16 @@ description: |
   <example>
   Context: The project is a FastAPI backend using voyo database access and mapper-only SQL.
   user: "Add a user CRUD endpoint"
-  assistant: "I'll use the server-agent to implement the endpoint following the project's backend conventions."
+  assistant: "I'll use the backend-python to implement the endpoint following the project's backend conventions."
   <commentary>
-  The request touches the database layer, services, and API, so the server-agent is appropriate.
+  The request touches the database layer, services, and API, so the backend-python is appropriate.
   </commentary>
   </example>
 
   <example>
   Context: The user wants to change how IDs are generated.
   user: "Switch all tables to use bigint IDs from voyo unique_id"
-  assistant: "I'll delegate to the server-agent to ensure all mapper files and models comply with the ID rules."
+  assistant: "I'll delegate to the backend-python to ensure all mapper files and models comply with the ID rules."
   <commentary>
   ID generation and schema changes are core backend concerns governed by this agent.
   </commentary>
