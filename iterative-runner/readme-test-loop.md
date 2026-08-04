@@ -2,6 +2,8 @@
 
 > 默认配置：`MAX_TEST_COUNT = 2`
 
+> **tester**: 用户指定的测试 agent，未指定时，主动选择最合适的agent 或 创建一个default agent。
+
 一个"测试—修复"的迭代式测试运行器。针对**已存在的后端代码**，反复调用 Claude Code 的无头子进程（`claude -p`），让 **tester** 编写精简测试并执行、**implementer** 修复失败用例，循环直到测试全绿或达到上限，最后给出总结。
 
 入口文件：[`test-loop.ts`](./test-loop.ts)

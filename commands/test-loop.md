@@ -15,7 +15,7 @@ User input: `$ARGUMENTS`
 2. **Build and run the command (background mode)**
 
    Parameters supported by `node iterative-runner/test-loop.ts`:
-   - `--test-agent <name>`: tester agent, defaults to `tester`
+   - `--test-agent <name>`: tester agent, defaults to `main`
    - `--fix-agent <name>`: fix agent; if omitted, no agent is specified (`--agent` is an alias for `--fix-agent`)
    - `--max-test-count N`: maximum test rounds, defaults to 2
 

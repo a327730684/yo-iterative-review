@@ -13,7 +13,7 @@ async function main(): Promise<void> {
 
   if (!requirements) {
     console.error('用法: node --experimental-strip-types iterative-runner/test-loop.ts [--test-agent <name>] [--fix-agent <name>] [--max-test-count N] "<需求描述>"');
-    console.error('  --test-agent  执行测试的 agent，未指定时使用 tester');
+    console.error('  --test-agent  执行测试的 agent，未指定时使用 主动创建一个');
     console.error('  --fix-agent   修复代码的 agent，未指定时不指定 agent');
     process.exit(1);
   }
