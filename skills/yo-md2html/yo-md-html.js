@@ -32,7 +32,7 @@ function htmlTemplate(title, body) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${title}</title>
 <style>
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.8; max-width: 880px; margin: 40px auto; padding: 0 24px; color: #2b2b2b; background: #faf7f2; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.8; max-width: 880px; margin: 40px auto; padding: 0 24px; color: #2b2b2b; background: #faf7f2; }
 h1, h2, h3, h4 { color: #1a1a1a; margin-top: 1.6em; margin-bottom: .9em; }
 h1 { font-size: 2em; }
 h2 { border-bottom: 1px solid #e9e2d8; padding-bottom: .35em; position: relative; }
@@ -49,11 +49,12 @@ hr { border: 0; border-top: 1px solid #e8d5b5; margin: 24px 0; }
 a { color: #c2703d; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .mermaid { background: transparent; text-align: center; }
+img { max-width: 100%; height: auto; }
 .mermaid svg { max-width: 100%; height: auto; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script src="https://unpkg.zhimg.com/mermaid@11.16.1/dist/mermaid.min.js"></script>
 <script type="module">
-  import elkLayouts from 'https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0/dist/mermaid-layout-elk.esm.min.mjs';
+  import elkLayouts from 'https://unpkg.zhimg.com/@mermaid-js/layout-elk@0/dist/mermaid-layout-elk.esm.min.mjs';
   mermaid.registerLayoutLoaders(elkLayouts);
   mermaid.initialize({ startOnLoad: true, theme: 'neo', look: 'neo' });
 </script>
