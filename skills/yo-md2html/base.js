@@ -39,7 +39,7 @@ hr { border: 0; border-top: 1px solid #e8d5b5; margin: 24px 0; }
 a { color: #c2703d; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .mermaid { background: transparent; text-align: center; }
-img { max-width: 100%; height: auto; }
+img { max-width: 100%; height: auto; border-radius: 10px; }
 .mermaid svg { max-width: 100%; height: auto; }
 `;
 

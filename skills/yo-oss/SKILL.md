@@ -36,7 +36,6 @@ node yo-oss.mjs yo_oss_upload --dir="<目录路径>" --prefix="<前缀>"
 - `dir` (string, 可选): 待上传目录路径，会递归上传目录下所有文件
 - `key` (string, 可选): OSS 上存储的目标 key（与 `file` 配合使用）
 - `prefix` (string, 可选): OSS 上存储的目录前缀（与 `dir` 配合使用），默认为 `dir` 的最后一段名
-- `unique` (boolean, 可选，默认 `true`): 自动从 `@ztwx/utils` 取唯一 id，注入到文件名（保留扩展名），避免与已有 OSS 对象重名覆盖
 
 **示例：**
 
@@ -46,9 +45,6 @@ node yo-oss.mjs yo_oss_upload --file="README.md" --key="test/readme.md"
 
 # 上传整个目录，每个文件末尾追加唯一 id
 node yo-oss.mjs yo_oss_upload --dir="dist" --prefix="static/dist"
-
-# 关闭唯一 id 后缀（按原文件名上传）
-node yo-oss.mjs yo_oss_upload --file="README.md" --key="docs/readme.md" --unique=false
 ```
 
 ## 特性
@@ -56,4 +52,4 @@ node yo-oss.mjs yo_oss_upload --file="README.md" --key="docs/readme.md" --unique
 - **配置自动加载**：自动从 `~/.claude/settings.json` 或进程环境变量读取 OSS 配置
 - **缺失配置快速失败**：配置不全时立即报错并提示需要哪些环境变量
 - **批量上传**：传入目录时递归上传所有文件
-- **唯一 id 防覆盖**：默认用 `@ztwx/utils` 的 `getUniqueId()` 生成后缀附加到文件名，避免覆盖同名远程文件
+- **唯一 id 防覆盖**：强制使用 `@ztwx/utils` 的 `getUniqueId()` 生成后缀附加到文件名，避免覆盖同名远程文件

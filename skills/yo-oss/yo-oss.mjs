@@ -139,7 +139,7 @@ function suffixRelPath(rel, uid) {
   return `${dir}${suffixName(base, uid)}`;
 }
 
-async function yoOssUpload({ file, key, dir, prefix, unique } = {}) {
+async function yoOssUpload({ file, key, dir, prefix } = {}) {
   if (!file && !dir) {
     throw new Error('Either --file or --dir must be provided.');
   }
@@ -147,9 +147,7 @@ async function yoOssUpload({ file, key, dir, prefix, unique } = {}) {
   const aliMod = await ensureAliOss();
   const { AliYoOSS } = aliMod;
 
-  // --unique 默认 true，--unique=false 时不追加 uid
-  const wantUnique = unique === undefined ? true : unique !== false && unique !== 'false';
-
+  // 始终追加唯一 id 到文件名，避免与已有 OSS 对象重名覆盖
   const { getUniqueId } = await ensureZtwxUtils();
 
   const client = new AliYoOSS({
@@ -163,11 +161,8 @@ async function yoOssUpload({ file, key, dir, prefix, unique } = {}) {
     if (!fs.existsSync(file)) throw new Error(`File not found: ${file}`);
     const baseName = path.basename(file);
     let targetKey = key || baseName;
-    let uid = null;
-    if (wantUnique) {
-      uid = getUniqueId();
-      targetKey = key ? suffixName(key, uid) : suffixName(baseName, uid);
-    }
+    const uid = getUniqueId();
+    targetKey = key ? suffixName(key, uid) : suffixName(baseName, uid);
     const result = await client.putFile(targetKey, path.resolve(file));
     return {
       bucket: cfg.bucket,
@@ -182,12 +177,8 @@ async function yoOssUpload({ file, key, dir, prefix, unique } = {}) {
   const files = walkFiles(dir);
   const items = [];
   for (const f of files) {
-    let remoteKey = `${basePrefix}/${f.rel}`;
-    let uid = null;
-    if (wantUnique) {
-      uid = getUniqueId();
-      remoteKey = `${basePrefix}/${suffixRelPath(f.rel, uid)}`;
-    }
+    const uid = getUniqueId();
+    const remoteKey = `${basePrefix}/${suffixRelPath(f.rel, uid)}`;
     const result = await client.putFile(remoteKey, f.abs);
     items.push({ key: remoteKey, name: result.name, url: result.url, status: result.res?.status, uid });
   }
@@ -237,14 +228,12 @@ Options:
   --key=<key>         Target OSS object key (with --file)
   --dir=<path>        Upload all files under a directory (recursive)
   --prefix=<prefix>   Key prefix used when uploading a directory
-  --unique=<bool>     Append @ztwx/utils unique id to each filename (default true)
   --tool=<name>       Specify tool name explicitly
   --help, -h          Show this help
 
 Examples:
   node yo-oss.mjs yo_oss_upload --file="dist/index.html" --key="static/index.html"
   node yo-oss.mjs yo_oss_upload --dir="dist" --prefix="static/dist"
-  node yo-oss.mjs yo_oss_upload --dir="dist" --prefix="static/dist" --unique=false
 `);
 }
 
