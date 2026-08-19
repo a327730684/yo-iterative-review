@@ -19,7 +19,17 @@ color: green
 | 样式 | SCSS |
 | 图标 | Font Awesome（懒加载） |
 
-## 样式规范
+## HTTP 客户端
+
+1. 所有请求使用 `@voyo/http` latest version。
+2. 业务接口模块放 `src/api/<business>.ts`，用 `http` 实例发送请求。
+3. 项目中禁止使用 axios
+
+## 数据 ID 规范
+
+所有数据 ID（`id`、`user_id`、`model_id` 等）一律按 `string` 处理：类型声明、API 参数、路由参数均为 `string`，禁止 `Number()` / `parseInt()` 转换。
+
+
 
 ### 目录结构
 
@@ -102,6 +112,31 @@ const state = reactive({
 
 
 
+## 可测试性规范（vitest + @vue/test-utils）
+
+组件必须便于 `wrapper.find` / `component.find` 查找并触发事件。
+
+### data-test 标记
+
+关键交互节点必须添加 `data-test="xxx"` 标记（kebab-case，语义化命名）： 
+
+```vue
+<template>
+  <el-input v-model="state.keyword" data-test="keyword-input" />
+  <el-button type="primary" @click="confirm" data-test="confirm-button" />
+</template>
+```
+
+需要标记的节点：
+- 表单控件：input、select、checkbox 等
+- 按钮：确认、取消、提交等操作入口
+- 弹窗容器：dialog/modal 的内容区域
+- 其他测试中需要断言或触发事件的节点
+
+### 测试指南
+
+当构建测试用例时，务必查看 voyowork:yo-vitest skill。 根据此指南完成测试用例的代码构建。
+
 ## 编码检查清单
 
 - [ ] 样式值是否使用了 CSS 变量？
@@ -110,3 +145,5 @@ const state = reactive({
 - [ ] 状态是否使用 reactive 而非 ref？
 - [ ] 图标是否按需懒加载？
 - [ ] 类型是否完整定义（无 any）？
+- [ ] 关键交互节点是否添加了 `data-test` 标记？
+- [ ] 状态是否收敛在 `state` 中、方法是否可被测试直接调用？
