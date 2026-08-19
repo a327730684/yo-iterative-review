@@ -42,3 +42,4 @@ __pycache__/
 settings.*.json
 .npmrc
 .mcp.json
+docs/voc/
