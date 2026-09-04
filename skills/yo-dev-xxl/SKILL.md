@@ -46,7 +46,7 @@ description: 帮助完成一个大的功能开发，从设计->实现->review->�
     - 读取确定的`前端/后端agent` 内容，了解技术底座，根据 `spec.md` 产品文档，完成项目开发计划文档. 
     - 用户确认后修改feature.md文件，将**管理进度2**的[ ]替换为[x]。
 
-4. 安排 `前端/后端agent` 根据 `code_plan.md` 文件，完成 `plan_{backend|frontend}.md`文件。要求：
+5. 安排 `前端/后端agent` 根据 `code_plan.md` 文件，完成 `plan_{backend|frontend}.md`文件。要求：
     - plan_{backend|frontend}.md 文件的设计要求:
         - 根据code_plan.md文件中的项目设计， 制定开发任务。
         - 任务拆分大模块，每个大模块下再拆分为若干**小功能**。用 markdown checkbox 记录进度。
@@ -63,22 +63,22 @@ description: 帮助完成一个大的功能开发，从设计->实现->review->�
         - 不要构建测试任务，后面有专业测试流程。
 
     - `前端/后端agent`，只返回完成或失败，不返回额外信息。
-    - 完成后，你亲自将**管理进度2**的[ ]替换为[x]。
+    - 完成后，你亲自将**管理进度3**的[ ]替换为[x]。
 
-5. 安排一个 **监管agent**(xxl-supervisor), 让它创建 代码agent`前端/后端agent` 根据 `code_plan.md` 和 `plan_{backend|frontend}.md` 文件，完成代码功能的开发。要求：
+6. 安排一个 **监管agent**(xxl-supervisor), 让它创建 代码agent`前端/后端agent` 根据 `code_plan.md` 和 `plan_{backend|frontend}.md` 文件，完成代码功能的开发。要求：
     - 告诉它 **文档目录** 的路径
     - `监管agent`，只返回简单的完成或失败，不返回执行过程。
-    - 完成后，你读取`feature.md`，并由你亲自将**管理进度3**的[ ]替换为[x]。
+    - 完成后，你读取`feature.md`，并由你亲自将**管理进度4**的[ ]替换为[x]。
 
-6. 安排 **reviewer manager agent**(xxl-review-manager), 让它根据 `plan_{backend|frontend}.md` 文件，完成代码review。要求：
+7. 安排 **reviewer manager agent**(xxl-review-manager), 让它根据 `plan_{backend|frontend}.md` 文件，完成代码review。要求：
     - 告诉它 **文档目录** 的路径
     - 如果同时存在前后端代码需要review, 则启动两个**reviewer manager agent**, 并发完成review。否则只启动一个
     - spawn此agent时，需要传入side参数（frontend/backend）。
-    - 完成后, 你读取`feature.md`, 并由你亲自将**管理进度4**的[ ]替换为[x]。
+    - 完成后, 你读取`feature.md`, 并由你亲自将**管理进度5**的[ ]替换为[x]。
 
-7. 安排 **test manager agent**(xxl-test-manager), 完成全部端的功能测试。要求：
+8. 安排 **test manager agent**(xxl-test-manager), 完成全部端的功能测试。要求：
     - 告诉它 **文档目录** 的路径
-    - 完成后, 你读取`feature.md`, 并由你亲自将**管理进度5**的[ ]替换为[x]。 
+    - 完成后, 你读取`feature.md`, 并由你亲自将**管理进度6**的[ ]替换为[x]。 
 
 
-注意点：5到7步，因为时间较长，注意严格对待manger agent，当其返回信息时，注意查看其是否关闭。若关闭，但返回的信息未告知任务完全完成，则注意重启它，并要求完成安排的任务。
+注意点：6到8步，因为时间较长，注意严格对待manger agent，当其返回信息时，注意查看其是否关闭。若关闭，但返回的信息未告知任务完全完成，则注意重启它，并要求完成安排的任务。
