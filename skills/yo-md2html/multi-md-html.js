@@ -16,8 +16,11 @@ const TABS_CSS = `
 .tab { padding: 12px 20px; border: none; background: transparent; font-size: 14px; color: #8c6a45; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; }
 .tab:hover { color: #5f4326; }
 .tab.active { color: #b0503c; font-weight: 600; border-bottom-color: #f0a030; }
-.tab-pane { display: none; }
-.tab-pane.active { display: block; }
+/* 隐藏面板不用 display:none：mermaid 首渲染拿不到宽高会算出 NaN 坐标。
+   改用 grid 叠放 + height:0：隐藏面板仍保有全宽（mermaid 测量正常），且不占页面高度 */
+.tab-panes { display: grid; }
+.tab-pane { grid-area: 1 / 1; height: 0; overflow: hidden; visibility: hidden; }
+.tab-pane.active { height: auto; overflow: visible; visibility: visible; }
 `;
 
 const TABS_SCRIPT = `<script>
@@ -57,7 +60,9 @@ ${MERMAID_SCRIPTS}
 <div class="tab-bar">
 ${tabButtons}
 </div>
+<div class="tab-panes">
 ${panes}
+</div>
 ${TABS_SCRIPT}
 </body>
 </html>`;

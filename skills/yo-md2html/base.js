@@ -44,9 +44,8 @@ img { max-width: 100%; height: auto; border-radius: 10px; }
 `;
 
 const MERMAID_SCRIPTS = `<script src="https://unpkg.zhimg.com/mermaid@11.16.1/dist/mermaid.min.js"></script>
-<script type="module">
-  import elkLayouts from 'https://unpkg.zhimg.com/@mermaid-js/layout-elk@0/dist/mermaid-layout-elk.esm.min.mjs';
-  mermaid.registerLayoutLoaders(elkLayouts);
+<script>
+  // 不 import layout-elk：zhimg 镜像无此包，import 失败会中断整个 module 脚本，导致 initialize 不执行
   mermaid.initialize({ startOnLoad: true, theme: 'neo', look: 'neo' });
 </script>`;
 
