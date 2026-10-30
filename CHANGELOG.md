@@ -5,6 +5,16 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
 版本遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.1.1] - 2026-10-30
+
+### Added
+- `hooks/prompts/coding-reminder.md`：插件 hook 注入的提示词正文，`hooks/simple/coding-reminder.js` 改为读取该文件，调整文案不再改代码。
+- 注入提示词新增「Coding requirements」段：禁止过度防御性编程（兜底默认值会掩盖异常），系统确需捕获的异常仍应 catch，但需甄别。
+
+### Changed
+- `package.json` 版本号对齐插件版本号。
+- `.claude/CLAUDE.md` 增加「版本发布」规则：`package.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json` 三处版本号同步更新。
+
 ## [0.0.1] - 2026-07-01
 
 ### Added

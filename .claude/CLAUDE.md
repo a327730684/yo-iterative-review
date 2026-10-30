@@ -19,3 +19,15 @@ claude plugin install voyо-iterative-review@voyowork
 修改代码后执行 `claude plugin update voyowork` 并重启 Claude Code。
 
 使用命令：`/voyowork:start <需求描述>`
+
+## 版本发布
+
+发布新版本时，三处版本号必须同步更新，保持一致：
+
+1. `package.json` → `version`
+2. `.claude-plugin/plugin.json` → `version`
+3. `.claude-plugin/marketplace.json` → `metadata.version`
+
+同时更新 `CHANGELOG.md`。
+
+发布后用户更新：`claude plugin marketplace update voyo-marketplace` → `claude plugin update voyowork`
