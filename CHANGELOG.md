@@ -15,6 +15,28 @@
 - `package.json` 版本号对齐插件版本号。
 - `.claude/CLAUDE.md` 增加「版本发布」规则：`package.json`、`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json` 三处版本号同步更新。
 
+## [1.1.0] - 2026-09-04
+
+### Added
+- `yo-oss` skill：上传本地文件到阿里云 OSS 并获取访问链接。
+- `yo-svg2png` skill：SVG 转 PNG。
+- `yo-tech-graph` skill：生成技术图表 SVG，支持 12 种视觉风格。
+- `yo-md2html` skill 支持目录批量转换（新增 `base.js`、`multi-md-html.js`）。
+
+### Changed
+- `dev-sm` 拆分为 skill，`commands/` 改为引用形式。
+
+## [1.0.0] - 2026-07-31
+
+### Added
+- 插件 hook：`hooks/hooks.json` + `hooks/simple/coding-reminder.js`，在 SessionStart 与 SubagentStart 注入编码提示词。
+- 开发流程 agent：`backend-python`、`frontend-vue`、`dev-supervisor`、`dev-review-manager`、`dev-test-manager`、`xxl-supervisor`、`xxl-review-manager`、`xxl-test-manager`。
+- `yo-dev-xxl`、`yo-vitest` skill；`dev-sm`、`dev-xxl` 命令。
+- `yo-docs-mcp`、`yo-tools-mcp` 两个 MCP 服务。
+
+### Removed
+- `skills/iterative-review/SKILL.md`、`commands/develop.md`、`commands/orchestrate.md`。
+
 ## [0.0.1] - 2026-07-01
 
 ### Added

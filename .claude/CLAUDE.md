@@ -4,21 +4,23 @@
 
 - **联网搜索**：优先使用 `bailian-web-search` skill，不要用内置的 `WebSearch` 或 `WebFetch`。
 
-## 本地安装方式（已配置）
+## 安装与更新
 
-本插件已通过本地路径安装到 Claude Code：
+市场名 `voyo-marketplace`，插件名 `voyowork`。
 
 ```bash
-# 市场注册（source 指向本项目目录）
-claude plugin marketplace add /Users/momo/workspace/claude-plugins/iterative-review
+# 市场注册
+claude plugin marketplace add https://github.com/a327730684/yo-iterative-review
 
 # 安装
-claude plugin install voyо-iterative-review@voyowork
+claude plugin install voyowork@voyo-marketplace
+
+# 更新
+claude plugin marketplace update voyo-marketplace
+claude plugin update voyowork
 ```
 
-修改代码后执行 `claude plugin update voyowork` 并重启 Claude Code。
-
-使用命令：`/voyowork:start <需求描述>`
+命令：`/voyowork:iterative <需求>`、`/voyowork:dev-sm <需求>`、`/voyowork:dev-xxl <需求>`
 
 ## 版本发布
 
