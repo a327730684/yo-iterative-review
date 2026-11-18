@@ -5,6 +5,16 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
 版本遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.2.0] - 2026-11-18
+
+### Added
+- `yo-qwen-image` skill：阿里云百炼 qwen-image 文生图/图生图，支持比例与分辨率档位、批量生成，图片自动下载到本地。
+- `yo-qwen-material` skill：透明背景素材图生成，qwen-image 绿/蓝/品红幕出图 + ffmpeg colorkey 抠图输出 RGBA PNG。
+
+### Changed
+- `yo-md2html`：Mermaid 图改由 pele 在 Node 端预渲染为内联 SVG（渐变描边主题、默认缩小 85%），不再引入浏览器端 Mermaid.js，离线可看；渲染失败保留原文本块。
+- `yo-md2html` 新增 `--scale` 参数控制 Mermaid 图显示缩放；依赖缺失时自动安装 `marked` 与 `pele`。
+
 ## [1.1.1] - 2026-10-30
 
 ### Added

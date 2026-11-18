@@ -9,7 +9,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { ensureMarked, convertMarkdown, BASE_CSS, MERMAID_SCRIPTS } = require('./base');
+const { ensureMarked, ensurePele, convertMarkdown, renderMermaids, BASE_CSS, PELE_CSS, GRADIENT_DEFS, DEFAULT_SCALE } = require('./base');
 
 const TABS_CSS = `
 .tab-bar { position: sticky; top: 0; z-index: 10; display: flex; gap: 4px; padding: 0 24px; background: #f1e7d8; border-bottom: 1px solid #e0d2bd; overflow-x: auto; }
@@ -53,10 +53,11 @@ function multiHtmlTemplate(title, tabs, bodies) {
 <title>${escapeHtml(title)}</title>
 <style>${BASE_CSS}
 body { margin: 0; }
-${TABS_CSS}</style>
-${MERMAID_SCRIPTS}
+${TABS_CSS}
+${PELE_CSS}</style>
 </head>
 <body>
+${GRADIENT_DEFS}
 <div class="tab-bar">
 ${tabButtons}
 </div>
@@ -68,7 +69,7 @@ ${TABS_SCRIPT}
 </html>`;
 }
 
-function main() {
+async function main() {
   const args = process.argv.slice(2);
 
   let inputArg = '';
@@ -76,6 +77,7 @@ function main() {
   let outputDir = '';
   let title = '文档';
   let name = 'index';
+  let scale = DEFAULT_SCALE;
 
   for (const arg of args) {
     if (arg.startsWith('--input=')) {
@@ -88,6 +90,8 @@ function main() {
       title = arg.slice(8);
     } else if (arg.startsWith('--name=')) {
       name = arg.slice(7);
+    } else if (arg.startsWith('--scale=')) {
+      scale = parseFloat(arg.slice(8)) || DEFAULT_SCALE;
     }
   }
 
@@ -129,7 +133,9 @@ Examples:
   }
 
   const markedInstance = ensureMarked();
-  const bodies = mdPaths.map(p => convertMarkdown(fs.readFileSync(p, 'utf8'), markedInstance));
+  const pele = await ensurePele();
+  const bodies = mdPaths.map(p =>
+    renderMermaids(convertMarkdown(fs.readFileSync(p, 'utf8'), markedInstance), pele, scale));
 
   const dir = outputDir ? path.resolve(outputDir) : path.dirname(mdPaths[0]);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -139,7 +145,7 @@ Examples:
 }
 
 if (require.main === module) {
-  main();
+  main().catch(e => { console.error(e); process.exit(1); });
 }
 
 module.exports = { multiHtmlTemplate };

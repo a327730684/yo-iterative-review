@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const { execSync } = require('child_process');
+const { pathToFileURL } = require('url');
 
 function ensureMarked() {
   try {
@@ -13,10 +14,27 @@ function ensureMarked() {
   } catch {
     console.log('[yo-md-html] marked not found, installing...');
     const scriptDir = __dirname;
-    execSync('npm install --no-save marked', { cwd: scriptDir, stdio: 'inherit' });
+    // 成对安装：--no-save 单装会 prune 掉另一个已装依赖
+    execSync('npm install --no-save marked pele', { cwd: scriptDir, stdio: 'inherit' });
     const markedPath = require.resolve('marked', { paths: [scriptDir] });
     delete require.cache[markedPath];
     return require(markedPath).marked;
+  }
+}
+
+// pele 为 ESM 包，须动态 import；缺失时先 npm install 再按路径加载
+async function ensurePele() {
+  try {
+    return await import('pele');
+  } catch {
+    console.log('[yo-md-html] pele not found, installing...');
+    execSync('npm install --no-save marked pele', { cwd: __dirname, stdio: 'inherit' });
+    try {
+      return await import('pele');
+    } catch {
+      const pelePath = require.resolve('pele', { paths: [__dirname] });
+      return await import(pathToFileURL(pelePath).href);
+    }
   }
 }
 
@@ -43,11 +61,41 @@ img { max-width: 100%; height: auto; border-radius: 10px; }
 .mermaid svg { max-width: 100%; height: auto; }
 `;
 
-const MERMAID_SCRIPTS = `<script src="https://unpkg.zhimg.com/mermaid@11.16.1/dist/mermaid.min.js"></script>
-<script>
-  // 不 import layout-elk：zhimg 镜像无此包，import 失败会中断整个 module 脚本，导致 initialize 不执行
-  mermaid.initialize({ startOnLoad: true, theme: 'neo', look: 'neo' });
-</script>`;
+// pele 主题：白卡片容器＋蓝→玫红渐变描边＋白节点＋黑连线＋灰底边标签
+const PELE_CSS = `
+.pele-wrap { overflow-x: auto; margin: 16px 0; padding: 12px; background: #FFFFFF; border: 1px solid #E4E4E2; border-radius: 12px;
+  --pele-bg: #DBDBDB; --pele-fg: #1F2937; --pele-muted: #6B7280; --pele-line: #141414;
+  --pele-surface: #FBFBFD; --pele-surface-alt: #F3F4F6; --pele-border: url(#peleGrad);
+  --pele-accent: #E11D48; --pele-radius: 2px;
+  --pele-font: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  --pele-font-mono: ui-monospace, Consolas, monospace;
+  --pele-series-1: #C15F3C; --pele-series-2: #7D9B76; --pele-series-3: #6A9BCC; --pele-series-4: #C99B3F;
+  --pele-series-5: #9B6A9D; --pele-series-6: #4E8D87; --pele-series-7: #B4552D; --pele-series-8: #5B6472; }
+.pele-wrap svg { display: block; margin: 0 auto; }
+`;
+
+// 渐变描边供 --pele-border:url(#peleGrad) 引用，全页共用一份
+const GRADIENT_DEFS = `<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="peleGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#E11D48"/></linearGradient></defs></svg>`;
+
+const DEFAULT_SCALE = 0.85;
+
+// 预渲染：mermaid 文本→内联 SVG（12px 字、紧凑间距），按 scale 等比缩小；失败保留原 pre
+function renderMermaids(html, pele, scale = DEFAULT_SCALE) {
+  return html.replace(/<pre class="mermaid">([\s\S]*?)<\/pre>/g, (m, code) => {
+    try {
+      const r = pele.render(code.trim(), {
+        fontSize: 12, padding: 6,
+        config: { flowchart: { nodeSpacing: 30, rankSpacing: 30 } },
+      });
+      const w = Math.round(r.width * scale), h = Math.round(r.height * scale);
+      const svg = r.svg.replace(/width="[\d.]+"/, `width="${w}"`).replace(/height="[\d.]+"/, `height="${h}"`);
+      return `<div class="pele-wrap">${svg}</div>`;
+    } catch (e) {
+      console.error('[yo-md-html] pele render fail:', e.message);
+      return m;
+    }
+  });
+}
 
 function htmlTemplate(title, body) {
   return `<!DOCTYPE html>
@@ -58,10 +106,10 @@ function htmlTemplate(title, body) {
 <title>${title}</title>
 <style>${BASE_CSS}
 body { max-width: 880px; margin: 40px auto; padding: 0 24px; }
-</style>
-${MERMAID_SCRIPTS}
+${PELE_CSS}</style>
 </head>
 <body>
+${GRADIENT_DEFS}
 ${body}
 </body>
 </html>`;
@@ -88,4 +136,4 @@ function convertMarkdown(mdContent, markedInstance) {
   return htmlBody;
 }
 
-module.exports = { ensureMarked, convertMarkdown, htmlTemplate, BASE_CSS, MERMAID_SCRIPTS };
+module.exports = { ensureMarked, ensurePele, convertMarkdown, renderMermaids, htmlTemplate, BASE_CSS, PELE_CSS, GRADIENT_DEFS, DEFAULT_SCALE };
